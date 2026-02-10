@@ -1,0 +1,67 @@
+import { useState } from "react";
+import { useGame } from "@/context/GameContext";
+import { Confetti } from "@/components/game/Confetti";
+import { Crown } from "lucide-react";
+
+export function HomeScreen() {
+  const { setScreen } = useGame();
+  const [showRules, setShowRules] = useState(false);
+
+  return (
+    <div className="min-h-[100dvh] game-gradient flex flex-col items-center justify-center relative overflow-hidden px-4">
+      <Confetti count={20} />
+      
+      <div className="animate-bounce-in mb-2">
+        <Crown className="w-20 h-20 text-primary" strokeWidth={2.5} />
+      </div>
+
+      <h1 className="font-display text-5xl font-bold text-foreground tracking-tight mb-1 animate-bounce-in">
+        PARTY
+      </h1>
+      <h1 className="font-display text-5xl font-bold text-primary tracking-tight mb-8 animate-bounce-in">
+        KING
+      </h1>
+      <p className="text-muted-foreground text-sm mb-12">Vědomostní párty hra</p>
+
+      <button
+        onClick={() => setScreen("setup")}
+        className="btn-game animate-pulse-glow mb-4 min-w-[200px]"
+      >
+        🎮 Nová hra
+      </button>
+
+      <button
+        onClick={() => setShowRules(true)}
+        className="text-muted-foreground underline text-sm"
+      >
+        📖 Pravidla
+      </button>
+
+      {showRules && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowRules(false)}>
+          <div className="bg-card rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <h2 className="font-display text-2xl font-bold text-primary mb-4">📖 Pravidla</h2>
+            <div className="space-y-3 text-sm text-foreground/90">
+              <p><strong>Hráči:</strong> 2–8 hráčů na jednom zařízení</p>
+              <p><strong>Cíl:</strong> Jako první dosáhnout cílového počtu bodů</p>
+              <p><strong>Průběh tahu:</strong> Otočí se kruh s 10 odpověďmi (5 správných, 5 špatných). Máš 60 sekund na označení správných.</p>
+              <p><strong>Špatná odpověď:</strong> Odečte 10 sekund z časomíry!</p>
+              <p><strong>Bodování:</strong></p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>1 správná = 1 bod</li>
+                <li>2 správné = 3 body</li>
+                <li>3 správné = 5 bodů</li>
+                <li>4 správné = 7 bodů</li>
+                <li>5 správných = 10 bodů</li>
+              </ul>
+              <p>Tah končí po nalezení všech 5 správných nebo po uplynutí času.</p>
+            </div>
+            <button onClick={() => setShowRules(false)} className="btn-game mt-6 w-full text-base">
+              Rozumím! 👍
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
