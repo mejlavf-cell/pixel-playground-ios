@@ -1,13 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { GameProvider, useGame } from "@/context/GameContext";
+import { HomeScreen } from "@/screens/HomeScreen";
+import { SetupScreen } from "@/screens/SetupScreen";
+import { PlayerTransitionScreen } from "@/screens/PlayerTransitionScreen";
+import { GameScreen } from "@/screens/GameScreen";
+import { WinnerScreen } from "@/screens/WinnerScreen";
+
+function GameRouter() {
+  const { screen } = useGame();
+
+  switch (screen) {
+    case "home":
+      return <HomeScreen />;
+    case "setup":
+      return <SetupScreen />;
+    case "playerTransition":
+      return <PlayerTransitionScreen />;
+    case "game":
+      return <GameScreen />;
+    case "winner":
+      return <WinnerScreen />;
+    default:
+      return <HomeScreen />;
+  }
+}
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <GameProvider>
+      <GameRouter />
+    </GameProvider>
   );
 };
 
