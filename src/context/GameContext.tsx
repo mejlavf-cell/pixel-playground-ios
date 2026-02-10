@@ -8,6 +8,7 @@ interface GameState {
   targetScore: number;
   currentPlayerIndex: number;
   currentQuestion: Question | null;
+  roundQuestion: Question | null; // unshuffled base question for the round
   usedQuestionIds: number[];
   roundAnswers: { correct: number };
   winner: Player | null;
@@ -33,6 +34,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     targetScore: 50,
     currentPlayerIndex: 0,
     currentQuestion: null,
+    roundQuestion: null,
     usedQuestionIds: [],
     roundAnswers: { correct: 0 },
     winner: null,
@@ -63,15 +65,27 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const startTurn = useCallback(() => {
     setState((s) => {
-      const available = getRandomQuestions(20).filter(
-        (q) => !s.usedQuestionIds.includes(q.id)
-      );
-      const question = available.length > 0 ? shuffleAnswers(available[0]) : shuffleAnswers(getRandomQuestions(1)[0]);
+      // New round (first player) → pick a new question
+      if (s.currentPlayerIndex === 0 || !s.currentQuestion) {
+        const available = getRandomQuestions(20).filter(
+          (q) => !s.usedQuestionIds.includes(q.id)
+        );
+        const base = available.length > 0 ? available[0] : getRandomQuestions(1)[0];
+        const question = shuffleAnswers(base);
+        return {
+          ...s,
+          screen: "game",
+          currentQuestion: question,
+          roundQuestion: base, // store unshuffled for reuse
+          usedQuestionIds: [...s.usedQuestionIds, base.id],
+          roundAnswers: { correct: 0 },
+        };
+      }
+      // Same round, different player → reshuffle same question
       return {
         ...s,
         screen: "game",
-        currentQuestion: question,
-        usedQuestionIds: [...s.usedQuestionIds, question.id],
+        currentQuestion: shuffleAnswers(s.roundQuestion ?? s.currentQuestion),
         roundAnswers: { correct: 0 },
       };
     });
@@ -127,6 +141,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       targetScore: 50,
       currentPlayerIndex: 0,
       currentQuestion: null,
+      roundQuestion: null,
       usedQuestionIds: [],
       roundAnswers: { correct: 0 },
       winner: null,
