@@ -85,15 +85,23 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
             </g>
           );
         })}
-        {/* center circle with Party King logo */}
+        {/* center circle with crown logo */}
         <circle cx={centerX} cy={centerY} r="32" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
-        <text x={centerX} y={centerY - 10} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="12" fontFamily="Fredoka, sans-serif" fontWeight="700">
-          👑
-        </text>
-        <text x={centerX} y={centerY + 3} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="7" fontFamily="Fredoka, sans-serif" fontWeight="700" letterSpacing="0.5">
+        {/* Crown */}
+        <g transform={`translate(${centerX - 16}, ${centerY - 18})`}>
+          <svg viewBox="0 0 100 80" width="32" height="24" fill="none">
+            <path d="M10 65 L5 25 L25 40 L50 10 L75 40 L95 25 L90 65 Z" fill="hsl(38 95% 58%)" />
+            <path d="M10 65 L5 25 L25 40 L50 10 L75 40 L95 25 L90 65 Z" fill="url(#cwg)" />
+            <circle cx="5" cy="25" r="5" fill="hsl(38 95% 58%)" />
+            <circle cx="50" cy="10" r="6" fill="hsl(40 95% 62%)" />
+            <circle cx="95" cy="25" r="5" fill="hsl(38 95% 58%)" />
+            <defs><linearGradient id="cwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="hsl(45 95% 65%)" /><stop offset="100%" stopColor="hsl(30 95% 50%)" /></linearGradient></defs>
+          </svg>
+        </g>
+        <text x={centerX} y={centerY + 8} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="7" fontFamily="Fredoka, sans-serif" fontWeight="900" letterSpacing="0.5">
           PARTY
         </text>
-        <text x={centerX} y={centerY + 14} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="800" letterSpacing="0.5">
+        <text x={centerX} y={centerY + 19} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="900" letterSpacing="0.5">
           KING
         </text>
       </svg>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { Confetti } from "@/components/game/Confetti";
-import { Crown } from "lucide-react";
+import { CrownLogo } from "@/components/game/CrownLogo";
 
 export function HomeScreen() {
   const { setScreen } = useGame();
@@ -11,17 +11,9 @@ export function HomeScreen() {
     <div className="min-h-[100dvh] game-gradient flex flex-col items-center justify-center relative overflow-hidden px-4">
       <Confetti count={20} />
       
-      <div className="animate-bounce-in mb-2">
-        <Crown className="w-20 h-20 text-primary" strokeWidth={2.5} />
+      <div className="animate-bounce-in mb-10">
+        <CrownLogo size="large" />
       </div>
-
-      <h1 className="font-display text-6xl text-foreground tracking-tight mb-1 animate-bounce-in" style={{ fontWeight: 900, letterSpacing: '0.03em' }}>
-        PARTY
-      </h1>
-      <h1 className="font-display text-6xl text-primary tracking-tight mb-8 animate-bounce-in" style={{ fontWeight: 900, letterSpacing: '0.03em' }}>
-        KING
-      </h1>
-      <p className="text-muted-foreground text-sm mb-12">Vědomostní párty hra</p>
 
       <button
         onClick={() => setScreen("setup")}
