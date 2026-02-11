@@ -131,7 +131,7 @@ export function SetupScreen() {
       {/* Start */}
       <button
         onClick={handleStart}
-        disabled={localPlayers.length < 2}
+        disabled={localPlayers.length < 1}
         className="btn-game w-full disabled:opacity-40 flex items-center justify-center gap-2"
       >
         <Play className="w-5 h-5" /> Start hry
