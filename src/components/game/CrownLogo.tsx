@@ -47,9 +47,9 @@ export function CrownLogo({ size = "large" }: CrownLogoProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <CrownSvg className="w-24 h-20 mb-1" />
+      <CrownSvg className="w-20 h-16 mb-1" />
       <h1
-        className="font-display text-7xl leading-[0.9] text-foreground text-center"
+        className="font-display text-[3.5rem] leading-[0.9] text-foreground text-center"
         style={{
           fontWeight: 900,
           letterSpacing: '-0.01em',
