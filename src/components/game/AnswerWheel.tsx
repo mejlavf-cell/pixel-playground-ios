@@ -87,14 +87,14 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
         })}
         {/* center circle with Party King logo */}
         <circle cx={centerX} cy={centerY} r="32" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
-        <text x={centerX} y={centerY - 8} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="700" letterSpacing="0.5">
+        <text x={centerX} y={centerY - 10} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="12" fontFamily="Fredoka, sans-serif" fontWeight="700">
+          👑
+        </text>
+        <text x={centerX} y={centerY + 3} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="7" fontFamily="Fredoka, sans-serif" fontWeight="700" letterSpacing="0.5">
           PARTY
         </text>
-        <text x={centerX} y={centerY + 4} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="9" fontFamily="Fredoka, sans-serif" fontWeight="800" letterSpacing="0.5">
+        <text x={centerX} y={centerY + 14} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="800" letterSpacing="0.5">
           KING
-        </text>
-        <text x={centerX} y={centerY + 16} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="10" fontFamily="Fredoka, sans-serif" fontWeight="700">
-          👑
         </text>
       </svg>
     </div>
