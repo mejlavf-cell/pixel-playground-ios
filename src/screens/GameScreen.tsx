@@ -59,6 +59,8 @@ export function GameScreen() {
   };
 
   const handleEndTurn = () => {
+    stopTimer();
+    setTurnEnded(true);
     endTurn();
   };
 
@@ -81,22 +83,24 @@ export function GameScreen() {
       </div>
 
       {/* Main area: timer + wheel */}
-      <div className="flex-1 flex flex-col items-center justify-center px-2">
-        <div className="flex items-start gap-2 w-full max-w-sm">
+      <div className="flex-1 flex flex-col items-center justify-center px-2 relative">
+        {/* Timer pinned top-left */}
+        <div className="absolute top-1 left-2">
           <Timer
             totalSeconds={TOTAL_TIME}
             remainingSeconds={timeLeft}
             onTick={() => {}}
             running={!turnEnded}
           />
-          <div className="flex-1">
-            <AnswerWheel
-              question={currentQuestion}
-              onAnswer={handleAnswer}
-              disabled={turnEnded}
-              correctCount={roundAnswers.correct}
-            />
-          </div>
+        </div>
+        {/* Wheel centered, full width */}
+        <div className="w-full px-2">
+          <AnswerWheel
+            question={currentQuestion}
+            onAnswer={handleAnswer}
+            disabled={turnEnded}
+            correctCount={roundAnswers.correct}
+          />
         </div>
       </div>
 
@@ -114,10 +118,8 @@ export function GameScreen() {
         <button
           onClick={handleEndTurn}
           className="btn-game w-full"
-          disabled={!turnEnded}
-          style={{ opacity: turnEnded ? 1 : 0.4 }}
         >
-          {turnEnded ? "Pokračovat →" : `Správných: ${roundAnswers.correct}/5`}
+          {turnEnded ? "Pokračovat →" : `Odeslat (${roundAnswers.correct}/5) →`}
         </button>
       </div>
     </div>

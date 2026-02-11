@@ -11,9 +11,10 @@ interface AnswerWheelProps {
 export function AnswerWheel({ question, onAnswer, disabled, correctCount }: AnswerWheelProps) {
   const [selected, setSelected] = useState<Record<number, "correct" | "wrong">>({});
   const totalAnswers = question.answers.length;
-  const radius = 140;
-  const centerX = 160;
-  const centerY = 160;
+  const size = 340;
+  const radius = size / 2 - 10;
+  const centerX = size / 2;
+  const centerY = size / 2;
 
   const handleClick = (index: number) => {
     if (disabled || selected[index]) return;
@@ -25,8 +26,8 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
   };
 
   return (
-    <div className="relative mx-auto" style={{ width: 320, height: 320 }}>
-      <svg width="320" height="320" viewBox="0 0 320 320">
+    <div className="relative mx-auto w-full" style={{ maxWidth: size }}>
+      <svg width="100%" viewBox={`0 0 ${size} ${size}`}>
         {question.answers.map((answer, i) => {
           const angleStep = (2 * Math.PI) / totalAnswers;
           const startAngle = i * angleStep - Math.PI / 2;
@@ -84,10 +85,16 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
             </g>
           );
         })}
-        {/* center circle */}
-        <circle cx={centerX} cy={centerY} r="28" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
-        <text x={centerX} y={centerY} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="16" fontFamily="Fredoka, sans-serif" fontWeight="700">
-          {correctCount}/5
+        {/* center circle with Party King logo */}
+        <circle cx={centerX} cy={centerY} r="32" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
+        <text x={centerX} y={centerY - 8} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="700" letterSpacing="0.5">
+          PARTY
+        </text>
+        <text x={centerX} y={centerY + 4} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="9" fontFamily="Fredoka, sans-serif" fontWeight="800" letterSpacing="0.5">
+          KING
+        </text>
+        <text x={centerX} y={centerY + 16} textAnchor="middle" dominantBaseline="central" fill="hsl(30 95% 55%)" fontSize="10" fontFamily="Fredoka, sans-serif" fontWeight="700">
+          👑
         </text>
       </svg>
     </div>

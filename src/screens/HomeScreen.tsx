@@ -15,10 +15,10 @@ export function HomeScreen() {
         <Crown className="w-20 h-20 text-primary" strokeWidth={2.5} />
       </div>
 
-      <h1 className="font-display text-5xl font-bold text-foreground tracking-tight mb-1 animate-bounce-in">
+      <h1 className="font-display text-5xl font-extrabold text-foreground tracking-tight mb-1 animate-bounce-in" style={{ fontWeight: 800, letterSpacing: '0.02em' }}>
         PARTY
       </h1>
-      <h1 className="font-display text-5xl font-bold text-primary tracking-tight mb-8 animate-bounce-in">
+      <h1 className="font-display text-5xl font-extrabold text-primary tracking-tight mb-8 animate-bounce-in" style={{ fontWeight: 800, letterSpacing: '0.02em' }}>
         KING
       </h1>
       <p className="text-muted-foreground text-sm mb-12">Vědomostní párty hra</p>
@@ -42,7 +42,7 @@ export function HomeScreen() {
           <div className="bg-card rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h2 className="font-display text-2xl font-bold text-primary mb-4">📖 Pravidla</h2>
             <div className="space-y-3 text-sm text-foreground/90">
-              <p><strong>Hráči:</strong> 2–8 hráčů na jednom zařízení</p>
+              <p><strong>Hráči:</strong> 1–8 hráčů na jednom zařízení</p>
               <p><strong>Cíl:</strong> Jako první dosáhnout cílového počtu bodů</p>
               <p><strong>Průběh tahu:</strong> Otočí se kruh s 10 odpověďmi (5 správných, 5 špatných). Máš 60 sekund na označení správných.</p>
               <p><strong>Špatná odpověď:</strong> Odečte 10 sekund z časomíry!</p>

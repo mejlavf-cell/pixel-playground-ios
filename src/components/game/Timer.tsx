@@ -9,47 +9,65 @@ interface TimerProps {
 
 export function Timer({ totalSeconds, remainingSeconds, onTick, running }: TimerProps) {
   const fraction = remainingSeconds / totalSeconds;
-  const angle = fraction * 360;
-  const r = 35;
-  const cx = 45;
-  const cy = 45;
+  const r = 26;
+  const cx = 34;
+  const cy = 34;
   
-  // hand angle (0 = 12 o'clock, clockwise)
-  const handAngle = (1 - fraction) * 360;
+  // hand moves clockwise from 12 o'clock: elapsed fraction * 360
+  const elapsed = 1 - fraction;
+  const handAngle = elapsed * 360;
   const handRad = (handAngle - 90) * (Math.PI / 180);
-  const hx = cx + (r - 5) * Math.cos(handRad);
-  const hy = cy + (r - 5) * Math.sin(handRad);
+  const hx = cx + (r - 4) * Math.cos(handRad);
+  const hy = cy + (r - 4) * Math.sin(handRad);
 
-  // arc for remaining
-  const startRad = -Math.PI / 2;
-  const endRad = startRad + (fraction * 2 * Math.PI);
-  const largeArc = fraction > 0.5 ? 1 : 0;
-  const ax = cx + r * Math.cos(endRad);
-  const ay = cy + r * Math.sin(endRad);
+  // arc: draw remaining portion clockwise from 12 o'clock
+  // We draw the "remaining" arc starting where elapsed ends, going clockwise to 12 o'clock
+  // Easier: draw elapsed arc (red bg) and remaining arc (green) on top
+  const elapsedRad = -Math.PI / 2 + elapsed * 2 * Math.PI;
+  const remLargeArc = fraction > 0.5 ? 1 : 0;
+  const elapsedLargeArc = elapsed > 0.5 ? 1 : 0;
+  
+  const ex = cx + r * Math.cos(elapsedRad);
+  const ey = cy + r * Math.sin(elapsedRad);
 
-  const arcPath = fraction <= 0
+  // Remaining arc: from elapsedRad clockwise back to 12 o'clock (-PI/2)
+  const topX = cx;
+  const topY = cy - r;
+
+  const remainingArcPath = fraction <= 0
     ? ""
     : fraction >= 1
-    ? `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx - 0.01} ${cy - r}`
-    : `M ${cx} ${cy - r} A ${r} ${r} 0 ${largeArc} 1 ${ax} ${ay}`;
+    ? `M ${topX} ${topY} A ${r} ${r} 0 1 1 ${topX - 0.01} ${topY}`
+    : `M ${ex} ${ey} A ${r} ${r} 0 ${remLargeArc} 1 ${topX} ${topY}`;
+
+  // Elapsed arc: from 12 o'clock clockwise to elapsedRad
+  const elapsedArcPath = elapsed <= 0
+    ? ""
+    : elapsed >= 1
+    ? `M ${topX} ${topY} A ${r} ${r} 0 1 1 ${topX - 0.01} ${topY}`
+    : `M ${topX} ${topY} A ${r} ${r} 0 ${elapsedLargeArc} 1 ${ex} ${ey}`;
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <svg width="90" height="90" viewBox="0 0 90 90">
+    <div className="flex flex-col items-center gap-0.5">
+      <svg width="68" height="68" viewBox="0 0 68 68">
         {/* background circle */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 80% 45%)" strokeWidth="6" opacity="0.3" />
-        {/* remaining arc */}
-        {arcPath && (
-          <path d={arcPath} fill="none" stroke="hsl(145 70% 50%)" strokeWidth="6" strokeLinecap="round" />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 0% 100% / 0.1)" strokeWidth="5" />
+        {/* elapsed arc (red) */}
+        {elapsedArcPath && (
+          <path d={elapsedArcPath} fill="none" stroke="hsl(0 80% 45%)" strokeWidth="5" opacity="0.5" />
+        )}
+        {/* remaining arc (green) */}
+        {remainingArcPath && (
+          <path d={remainingArcPath} fill="none" stroke="hsl(145 70% 50%)" strokeWidth="5" strokeLinecap="round" />
         )}
         {/* center dot */}
-        <circle cx={cx} cy={cy} r="3" fill="hsl(30 95% 55%)" />
+        <circle cx={cx} cy={cy} r="2.5" fill="hsl(30 95% 55%)" />
         {/* hand */}
-        <line x1={cx} y1={cy} x2={hx} y2={hy} stroke="hsl(30 95% 55%)" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1={cx} y1={cy} x2={hx} y2={hy} stroke="hsl(30 95% 55%)" strokeWidth="2" strokeLinecap="round" />
         {/* ticks */}
         {Array.from({ length: 12 }, (_, i) => {
           const a = (i * 30 - 90) * (Math.PI / 180);
-          const inner = r - 4;
+          const inner = r - 3;
           return (
             <line
               key={i}
@@ -57,13 +75,13 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
               y1={cy + inner * Math.sin(a)}
               x2={cx + r * Math.cos(a)}
               y2={cy + r * Math.sin(a)}
-              stroke="hsl(0 0% 100% / 0.4)"
+              stroke="hsl(0 0% 100% / 0.3)"
               strokeWidth="1"
             />
           );
         })}
       </svg>
-      <span className="text-sm font-bold font-display" style={{ color: remainingSeconds <= 10 ? "hsl(0 80% 55%)" : "hsl(0 0% 100%)" }}>
+      <span className="text-xs font-bold font-display" style={{ color: remainingSeconds <= 10 ? "hsl(0 80% 55%)" : "hsl(0 0% 100%)" }}>
         {remainingSeconds}s
       </span>
     </div>
