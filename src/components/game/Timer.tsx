@@ -9,9 +9,9 @@ interface TimerProps {
 
 export function Timer({ totalSeconds, remainingSeconds, onTick, running }: TimerProps) {
   const fraction = remainingSeconds / totalSeconds;
-  const r = 26;
-  const cx = 34;
-  const cy = 34;
+  const r = 18;
+  const cx = 24;
+  const cy = 24;
   
   // hand moves clockwise from 12 o'clock: elapsed fraction * 360
   const elapsed = 1 - fraction;
@@ -49,21 +49,21 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
 
   return (
     <div className="flex flex-col items-center gap-0.5">
-      <svg width="68" height="68" viewBox="0 0 68 68">
+      <svg width="48" height="48" viewBox="0 0 48 48">
         {/* background circle */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 0% 100% / 0.1)" strokeWidth="5" />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 0% 100% / 0.1)" strokeWidth="4" />
         {/* elapsed arc (red) */}
         {elapsedArcPath && (
-          <path d={elapsedArcPath} fill="none" stroke="hsl(0 80% 45%)" strokeWidth="5" opacity="0.5" />
+          <path d={elapsedArcPath} fill="none" stroke="hsl(0 80% 45%)" strokeWidth="4" opacity="0.5" />
         )}
         {/* remaining arc (green) */}
         {remainingArcPath && (
-          <path d={remainingArcPath} fill="none" stroke="hsl(145 70% 50%)" strokeWidth="5" strokeLinecap="round" />
+          <path d={remainingArcPath} fill="none" stroke="hsl(145 70% 50%)" strokeWidth="4" strokeLinecap="round" />
         )}
         {/* center dot */}
-        <circle cx={cx} cy={cy} r="2.5" fill="hsl(30 95% 55%)" />
+        <circle cx={cx} cy={cy} r="2" fill="hsl(30 95% 55%)" />
         {/* hand */}
-        <line x1={cx} y1={cy} x2={hx} y2={hy} stroke="hsl(30 95% 55%)" strokeWidth="2" strokeLinecap="round" />
+        <line x1={cx} y1={cy} x2={hx} y2={hy} stroke="hsl(30 95% 55%)" strokeWidth="1.5" strokeLinecap="round" />
         {/* ticks */}
         {Array.from({ length: 12 }, (_, i) => {
           const a = (i * 30 - 90) * (Math.PI / 180);
