@@ -4,13 +4,13 @@ import { AnswerWheel } from "@/components/game/AnswerWheel";
 import { Timer } from "@/components/game/Timer";
 import { ScoreBoard } from "@/components/game/ScoreBoard";
 import { SCORING } from "@/types/game";
+import { playSound } from "@/lib/sounds";
 
-const TOTAL_TIME = 60;
 const PENALTY = 10;
 
 export function GameScreen() {
-  const { currentQuestion, players, currentPlayerIndex, submitAnswer, endTurn, roundAnswers } = useGame();
-  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+  const { currentQuestion, players, currentPlayerIndex, submitAnswer, endTurn, roundAnswers, turnTime } = useGame();
+  const [timeLeft, setTimeLeft] = useState(turnTime);
   const [turnEnded, setTurnEnded] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -27,6 +27,7 @@ export function GameScreen() {
         if (prev <= 1) {
           stopTimer();
           setTurnEnded(true);
+          playSound("timeUp");
           return 0;
         }
         return prev - 1;
@@ -40,17 +41,22 @@ export function GameScreen() {
     if (roundAnswers.correct >= 5 && !turnEnded) {
       stopTimer();
       setTurnEnded(true);
+      playSound("win");
     }
   }, [roundAnswers.correct, turnEnded, stopTimer]);
 
   const handleAnswer = (index: number): boolean => {
     const isCorrect = submitAnswer(index);
-    if (!isCorrect) {
+    if (isCorrect) {
+      playSound("correct");
+    } else {
+      playSound("wrong");
       setTimeLeft((prev) => {
         const next = Math.max(0, prev - PENALTY);
         if (next <= 0) {
           stopTimer();
           setTurnEnded(true);
+          playSound("timeUp");
         }
         return next;
       });
@@ -70,10 +76,8 @@ export function GameScreen() {
 
   return (
     <div className="min-h-[100dvh] game-gradient flex flex-col">
-      {/* Scoreboard */}
       <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
 
-      {/* Question */}
       <div className="px-4 py-2">
         <div className="bg-card/60 rounded-xl px-4 py-3">
           <p className="text-foreground text-center font-bold text-sm leading-tight">
@@ -82,18 +86,15 @@ export function GameScreen() {
         </div>
       </div>
 
-      {/* Main area: timer + wheel */}
       <div className="flex-1 flex flex-col items-center justify-center px-2 relative">
-        {/* Timer pinned top-left */}
         <div className="absolute top-1 left-2">
           <Timer
-            totalSeconds={TOTAL_TIME}
+            totalSeconds={turnTime}
             remainingSeconds={timeLeft}
             onTick={() => {}}
             running={!turnEnded}
           />
         </div>
-        {/* Wheel centered, full width */}
         <div className="w-full px-2">
           <AnswerWheel
             question={currentQuestion}
@@ -104,7 +105,6 @@ export function GameScreen() {
         </div>
       </div>
 
-      {/* Bottom */}
       <div className="px-4 pb-6 pt-2">
         {turnEnded ? (
           <div className="text-center mb-3">

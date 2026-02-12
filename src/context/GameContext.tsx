@@ -6,18 +6,22 @@ interface GameState {
   screen: GameScreen;
   players: Player[];
   targetScore: number;
+  turnTime: number;
   currentPlayerIndex: number;
   currentQuestion: Question | null;
-  roundQuestion: Question | null; // unshuffled base question for the round
+  roundQuestion: Question | null;
   usedQuestionIds: number[];
   roundAnswers: { correct: number };
   winner: Player | null;
+  /** Track if someone reached target this round, to let others finish */
+  roundFinishPending: boolean;
 }
 
 interface GameContextType extends GameState {
   setScreen: (screen: GameScreen) => void;
   setPlayers: (players: Player[]) => void;
   setTargetScore: (score: number) => void;
+  setTurnTime: (seconds: number) => void;
   startGame: () => void;
   startTurn: () => void;
   submitAnswer: (answerIndex: number) => boolean;
@@ -32,12 +36,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     screen: "home",
     players: [],
     targetScore: 50,
+    turnTime: 60,
     currentPlayerIndex: 0,
     currentQuestion: null,
     roundQuestion: null,
     usedQuestionIds: [],
     roundAnswers: { correct: 0 },
     winner: null,
+    roundFinishPending: false,
   });
 
   const setScreen = useCallback((screen: GameScreen) => {
@@ -52,6 +58,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setState((s) => ({ ...s, targetScore }));
   }, []);
 
+  const setTurnTime = useCallback((turnTime: number) => {
+    setState((s) => ({ ...s, turnTime }));
+  }, []);
+
   const startGame = useCallback(() => {
     setState((s) => ({
       ...s,
@@ -60,6 +70,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       usedQuestionIds: [],
       players: s.players.map((p) => ({ ...p, score: 0 })),
       winner: null,
+      roundFinishPending: false,
     }));
   }, []);
 
@@ -67,7 +78,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setState((s) => {
       // New round (first player) → pick a new question
       if (s.currentPlayerIndex === 0 || !s.currentQuestion) {
-        const available = getRandomQuestions(20).filter(
+        const available = getRandomQuestions(100).filter(
           (q) => !s.usedQuestionIds.includes(q.id)
         );
         const base = available.length > 0 ? available[0] : getRandomQuestions(1)[0];
@@ -76,7 +87,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           ...s,
           screen: "game",
           currentQuestion: question,
-          roundQuestion: base, // store unshuffled for reuse
+          roundQuestion: base,
           usedQuestionIds: [...s.usedQuestionIds, base.id],
           roundAnswers: { correct: 0 },
         };
@@ -115,21 +126,31 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       );
 
       const currentPlayer = updatedPlayers[s.currentPlayerIndex];
-      if (currentPlayer.score >= s.targetScore) {
+      const reachedTarget = currentPlayer.score >= s.targetScore;
+      const pendingNow = s.roundFinishPending || reachedTarget;
+
+      const nextIndex = (s.currentPlayerIndex + 1) % s.players.length;
+      const isRoundEnd = nextIndex === 0; // wrapped around = end of round
+
+      // If round ends and someone reached the target → winner screen
+      if (isRoundEnd && pendingNow) {
+        // Find the player with highest score
+        const best = [...updatedPlayers].sort((a, b) => b.score - a.score)[0];
         return {
           ...s,
           players: updatedPlayers,
-          winner: currentPlayer,
+          winner: best,
           screen: "winner",
+          roundFinishPending: false,
         };
       }
 
-      const nextIndex = (s.currentPlayerIndex + 1) % s.players.length;
       return {
         ...s,
         players: updatedPlayers,
         currentPlayerIndex: nextIndex,
         screen: "playerTransition",
+        roundFinishPending: pendingNow,
       };
     });
   }, []);
@@ -139,12 +160,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       screen: "home",
       players: [],
       targetScore: 50,
+      turnTime: 60,
       currentPlayerIndex: 0,
       currentQuestion: null,
       roundQuestion: null,
       usedQuestionIds: [],
       roundAnswers: { correct: 0 },
       winner: null,
+      roundFinishPending: false,
     });
   }, []);
 
@@ -155,6 +178,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         setScreen,
         setPlayers,
         setTargetScore,
+        setTurnTime,
         startGame,
         startTurn,
         submitAnswer,

@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Plus, X, Play } from "lucide-react";
 
 export function SetupScreen() {
-  const { setPlayers, setTargetScore, targetScore, startGame, setScreen } = useGame();
+  const { setPlayers, setTargetScore, setTurnTime, targetScore, turnTime, startGame, setScreen } = useGame();
   const [localPlayers, setLocalPlayers] = useState<Player[]>([]);
   const [name, setName] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
   const [localTarget, setLocalTarget] = useState(targetScore);
+  const [localTurnTime, setLocalTurnTime] = useState(turnTime);
 
   const usedColors = localPlayers.map((p) => p.colorIndex);
   const availableColors = PLAYER_COLORS.map((_, i) => i).filter((i) => !usedColors.includes(i));
@@ -39,6 +40,7 @@ export function SetupScreen() {
   const handleStart = () => {
     setPlayers(localPlayers);
     setTargetScore(localTarget);
+    setTurnTime(localTurnTime);
     startGame();
   };
 
@@ -51,7 +53,7 @@ export function SetupScreen() {
       <h2 className="font-display text-2xl font-bold text-foreground mb-6">Nastavení hry</h2>
 
       {/* Target score */}
-      <div className="mb-6">
+      <div className="mb-4">
         <label className="text-sm font-bold text-foreground mb-2 block">
           🎯 Cílové skóre: <span className="text-primary">{localTarget}</span>
         </label>
@@ -60,6 +62,21 @@ export function SetupScreen() {
           onValueChange={([v]) => setLocalTarget(v)}
           min={10}
           max={100}
+          step={5}
+          className="w-full"
+        />
+      </div>
+
+      {/* Turn time */}
+      <div className="mb-6">
+        <label className="text-sm font-bold text-foreground mb-2 block">
+          ⏱ Čas na kolo: <span className="text-primary">{localTurnTime}s</span>
+        </label>
+        <Slider
+          value={[localTurnTime]}
+          onValueChange={([v]) => setLocalTurnTime(v)}
+          min={15}
+          max={120}
           step={5}
           className="w-full"
         />
@@ -88,7 +105,7 @@ export function SetupScreen() {
           </button>
         </div>
         
-        {/* Color picker */}
+        {/* Color picker with pattern preview */}
         <div className="flex gap-2 flex-wrap">
           {PLAYER_COLORS.map((color, i) => {
             const isUsed = usedColors.includes(i);
@@ -97,13 +114,16 @@ export function SetupScreen() {
                 key={i}
                 disabled={isUsed}
                 onClick={() => setSelectedColor(i)}
-                className="w-9 h-9 rounded-full border-2 transition-all disabled:opacity-20"
+                className="w-10 h-10 rounded-full border-2 transition-all disabled:opacity-20 flex items-center justify-center text-[10px]"
                 style={{
                   backgroundColor: color.bg,
                   borderColor: selectedColor === i ? "white" : "transparent",
                   transform: selectedColor === i ? "scale(1.15)" : "scale(1)",
                 }}
-              />
+                title={color.pattern}
+              >
+                {color.pattern.slice(0, 2)}
+              </button>
             );
           })}
         </div>
@@ -119,7 +139,10 @@ export function SetupScreen() {
               className="flex items-center justify-between rounded-xl px-4 py-3"
               style={{ backgroundColor: color.bg }}
             >
-              <span className="font-bold text-foreground">{player.name}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{color.pattern.slice(0, 2)}</span>
+                <span className="font-bold text-foreground">{player.name}</span>
+              </div>
               <button onClick={() => removePlayer(player.id)}>
                 <X className="w-5 h-5 text-foreground/70" />
               </button>

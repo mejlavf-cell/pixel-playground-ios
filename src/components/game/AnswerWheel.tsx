@@ -8,6 +8,24 @@ interface AnswerWheelProps {
   correctCount: number;
 }
 
+/** Split text into lines that fit within maxChars per line */
+function wrapText(text: string, maxChars: number): string[] {
+  if (text.length <= maxChars) return [text];
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    if (current && (current + " " + word).length > maxChars) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = current ? current + " " + word : word;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
 export function AnswerWheel({ question, onAnswer, disabled, correctCount }: AnswerWheelProps) {
   const [selected, setSelected] = useState<Record<number, "correct" | "wrong">>({});
   const totalAnswers = question.answers.length;
@@ -56,6 +74,18 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
             stroke = "hsl(0 80% 55%)";
           }
 
+          // Wrap long text
+          const maxChars = answer.text.length > 16 ? 10 : 14;
+          const lines = wrapText(answer.text, maxChars);
+          const fontSize = lines.length > 1 ? 7 : answer.text.length > 12 ? 8 : answer.text.length > 8 ? 9 : 10;
+          const lineHeight = fontSize + 2;
+          const textStartY = ty - ((lines.length - 1) * lineHeight) / 2;
+
+          // Rotate text to align with slice
+          const rotDeg = (midAngle * 180) / Math.PI;
+          const flipText = rotDeg > 90 && rotDeg < 270;
+          const textRotation = flipText ? rotDeg + 180 : rotDeg;
+
           return (
             <g
               key={i}
@@ -70,18 +100,21 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
                 strokeWidth="2"
                 opacity={disabled && !selected[i] ? 0.5 : 1}
               />
-              <text
-                x={tx}
-                y={ty}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="white"
-                fontSize={answer.text.length > 12 ? "8" : answer.text.length > 8 ? "9" : "10"}
-                fontFamily="Nunito, sans-serif"
-                fontWeight="600"
-              >
-                {answer.text}
-              </text>
+              {lines.map((line, li) => (
+                <text
+                  key={li}
+                  x={tx}
+                  y={textStartY + li * lineHeight}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill="white"
+                  fontSize={fontSize}
+                  fontFamily="Nunito, sans-serif"
+                  fontWeight="600"
+                >
+                  {line}
+                </text>
+              ))}
             </g>
           );
         })}
