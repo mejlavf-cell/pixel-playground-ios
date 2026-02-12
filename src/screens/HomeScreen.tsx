@@ -17,20 +17,20 @@ export function HomeScreen() {
 
       <button
         onClick={() => setScreen("setup")}
-        className="btn-game animate-pulse-glow mb-4 min-w-[200px]"
-      >
-        🎮 Nová hra
+        className="btn-game animate-pulse-glow mb-4 min-w-[200px] border">
+
+        Nová hra
       </button>
 
       <button
         onClick={() => setShowRules(true)}
-        className="text-muted-foreground underline text-sm"
-      >
+        className="text-muted-foreground underline text-sm">
+
         📖 Pravidla
       </button>
 
-      {showRules && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowRules(false)}>
+      {showRules &&
+      <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowRules(false)}>
           <div className="bg-card rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h2 className="font-display text-2xl font-bold text-primary mb-4">📖 Pravidla</h2>
             <div className="space-y-3 text-sm text-foreground/90">
@@ -53,7 +53,7 @@ export function HomeScreen() {
             </button>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }
