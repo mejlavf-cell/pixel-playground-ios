@@ -17,7 +17,7 @@ export function HomeScreen() {
 
       <button
         onClick={() => setScreen("setup")}
-        className="btn-game animate-pulse-glow mb-4 min-w-[200px] border">
+        className="btn-game animate-pulse-glow mb-4 min-w-[200px] border shadow-md">
 
         Nová hra
       </button>

@@ -61,7 +61,7 @@ export function CrownLogo({ size = "large" }: CrownLogoProps) {
         <span className="text-foreground">KING</span>
       </h1>
       {/* BY YOE - right-aligned to width of "NG" */}
-      <div className="w-full flex justify-end" style={{ maxWidth: '220px' }}>
+      <div className="w-full flex items-center justify-center" style={{ maxWidth: '220px' }}>
         <span
           className="leading-none tracking-wide text-[#f8f7f7] text-base"
           style={{
