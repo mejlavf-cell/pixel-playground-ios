@@ -26,7 +26,7 @@ export function HomeScreen() {
         onClick={() => setShowRules(true)}
         className="text-muted-foreground underline text-sm">
 
-        📖 Pravidla
+         Pravidla
       </button>
 
       {showRules &&
