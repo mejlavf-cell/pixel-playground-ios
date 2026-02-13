@@ -3,7 +3,6 @@ const audioCtx = typeof window !== "undefined" ? new (window.AudioContext || (wi
 
 function beep(frequency: number, duration: number, type: OscillatorType = "sine", volume = 0.3) {
   if (!audioCtx) return;
-  // Resume context if suspended (autoplay policy)
   if (audioCtx.state === "suspended") audioCtx.resume();
 
   const osc = audioCtx.createOscillator();
@@ -18,12 +17,18 @@ function beep(frequency: number, duration: number, type: OscillatorType = "sine"
   osc.stop(audioCtx.currentTime + duration);
 }
 
-export function playSound(type: "correct" | "wrong" | "win" | "timeUp" | "tick") {
+// Progressive correct tones - each one higher than the last
+const CORRECT_TONES = [523, 659, 784, 988, 1175]; // C5, E5, G5, B5, D6
+
+export function playSound(type: "correct" | "wrong" | "win" | "timeUp" | "tick" | "click", correctIndex?: number) {
   switch (type) {
-    case "correct":
-      beep(880, 0.15, "sine", 0.25);
-      setTimeout(() => beep(1100, 0.15, "sine", 0.25), 100);
+    case "correct": {
+      const idx = Math.min(correctIndex ?? 0, CORRECT_TONES.length - 1);
+      const freq = CORRECT_TONES[idx];
+      beep(freq, 0.15, "sine", 0.25);
+      setTimeout(() => beep(freq * 1.25, 0.15, "sine", 0.25), 100);
       break;
+    }
     case "wrong":
       beep(200, 0.3, "square", 0.2);
       break;
@@ -39,6 +44,9 @@ export function playSound(type: "correct" | "wrong" | "win" | "timeUp" | "tick")
       break;
     case "tick":
       beep(600, 0.05, "sine", 0.1);
+      break;
+    case "click":
+      beep(800, 0.08, "sine", 0.15);
       break;
   }
 }

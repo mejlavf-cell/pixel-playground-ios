@@ -79,8 +79,83 @@
     );
   }
 
+  /* Textured purple background matching the logo image style */
+  .game-bg {
+    background: 
+      radial-gradient(ellipse at 30% 20%, hsla(310 80% 55% / 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, hsla(310 70% 50% / 0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, hsla(290 60% 45% / 0.5) 0%, transparent 60%),
+      radial-gradient(circle at 20% 70%, hsla(270 50% 40% / 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 80% 30%, hsla(280 60% 50% / 0.25) 0%, transparent 40%),
+      linear-gradient(135deg, hsl(275 55% 20%), hsl(300 50% 25%) 40%, hsl(320 55% 30%) 70%, hsl(280 50% 18%));
+  }
+
+  /* Player-colored textured background */
+  .game-bg-player {
+    background:
+      radial-gradient(ellipse at 30% 20%, hsla(0 0% 100% / 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, hsla(0 0% 100% / 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, hsla(0 0% 0% / 0.1) 0%, transparent 60%),
+      var(--player-gradient);
+  }
+
   .btn-game {
-    @apply bg-primary text-primary-foreground font-bold rounded-full px-8 py-4 text-lg shadow-lg;
+    @apply bg-primary text-primary-foreground font-bold rounded-full px-8 py-4 text-lg;
     font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(180deg, hsl(38 95% 62%) 0%, hsl(30 95% 50%) 100%);
+    box-shadow: 0 4px 0 hsl(25 80% 38%), 0 6px 12px hsla(0 0% 0% / 0.3);
+    border: 2px solid hsl(40 90% 65%);
+    text-shadow: 0 1px 2px hsla(0 0% 0% / 0.3);
+    transition: all 0.1s ease;
+  }
+
+  .btn-game:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 hsl(25 80% 38%), 0 3px 6px hsla(0 0% 0% / 0.3);
+  }
+
+  /* Plastic playful button style */
+  .btn-game-plastic {
+    @apply font-bold rounded-full px-8 py-4 text-lg text-primary-foreground;
+    font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(180deg, hsl(38 95% 65%) 0%, hsl(30 95% 50%) 100%);
+    box-shadow: 
+      0 5px 0 hsl(25 80% 35%),
+      0 8px 16px hsla(0 0% 0% / 0.35),
+      inset 0 2px 4px hsla(50 100% 90% / 0.4);
+    border: 2px solid hsl(40 90% 68%);
+    text-shadow: 0 2px 3px hsla(0 0% 0% / 0.3);
+    transition: all 0.1s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-game-plastic:active {
+    transform: translateY(3px);
+    box-shadow: 
+      0 2px 0 hsl(25 80% 35%),
+      0 3px 8px hsla(0 0% 0% / 0.35),
+      inset 0 2px 4px hsla(50 100% 90% / 0.3);
+  }
+
+  .btn-game-plastic-secondary {
+    @apply font-bold rounded-full px-8 py-4 text-lg text-foreground;
+    font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(180deg, hsl(280 50% 55%) 0%, hsl(270 50% 40%) 100%);
+    box-shadow: 
+      0 5px 0 hsl(270 50% 28%),
+      0 8px 16px hsla(0 0% 0% / 0.35),
+      inset 0 2px 4px hsla(280 80% 80% / 0.3);
+    border: 2px solid hsl(280 50% 60%);
+    text-shadow: 0 2px 3px hsla(0 0% 0% / 0.3);
+    transition: all 0.1s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-game-plastic-secondary:active {
+    transform: translateY(3px);
+    box-shadow: 
+      0 2px 0 hsl(270 50% 28%),
+      0 3px 8px hsla(0 0% 0% / 0.35),
+      inset 0 2px 4px hsla(280 80% 80% / 0.2);
   }
 }

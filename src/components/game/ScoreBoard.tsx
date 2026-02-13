@@ -22,7 +22,7 @@ export function ScoreBoard({ players, currentPlayerIndex }: ScoreBoardProps) {
               border: isCurrent ? `2px solid ${color.light}` : "2px solid transparent",
             }}
           >
-            <span className="text-[8px]">{color.pattern.slice(0, 1)}</span>
+            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color.bg }} />
             <span className="text-[10px] font-bold truncate max-w-[48px]" style={{ color: isCurrent ? "white" : color.light }}>
               {player.name}
             </span>
