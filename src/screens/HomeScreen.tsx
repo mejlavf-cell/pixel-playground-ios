@@ -13,21 +13,21 @@ export function HomeScreen() {
       <Confetti count={20} />
       
       <div className="animate-bounce-in mb-10">
-        <img src={logoImage} alt="Party King" className="w-52 h-auto drop-shadow-2xl" />
+        <img alt="Party King" className="w-52 h-auto drop-shadow-2xl" src="/lovable-uploads/bc72b49e-3f54-4976-b1b9-875af26e3f74.png" />
       </div>
 
       <button
-        onClick={() => { playSound("click"); setScreen("setup"); }}
-        className="btn-game-plastic animate-pulse-glow mb-4 min-w-[220px]"
-      >
+        onClick={() => {playSound("click");setScreen("setup");}}
+        className="btn-game-plastic animate-pulse-glow mb-4 min-w-[220px]">
+
         Nová hra
       </button>
 
 
       <button
-        onClick={() => { playSound("click"); setShowRules(true); }}
-        className="text-muted-foreground underline text-sm"
-      >
+        onClick={() => {playSound("click");setShowRules(true);}}
+        className="text-muted-foreground underline text-sm">
+
          Pravidla
       </button>
 
@@ -56,6 +56,6 @@ export function HomeScreen() {
           </div>
         </div>
       }
-    </div>
-  );
+    </div>);
+
 }
