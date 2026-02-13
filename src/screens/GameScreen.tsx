@@ -3,7 +3,7 @@ import { useGame } from "@/context/GameContext";
 import { AnswerWheel } from "@/components/game/AnswerWheel";
 import { Timer } from "@/components/game/Timer";
 import { ScoreBoard } from "@/components/game/ScoreBoard";
-import { SCORING } from "@/types/game";
+import { SCORING, PLAYER_COLORS } from "@/types/game";
 import { playSound } from "@/lib/sounds";
 
 const PENALTY = 10;
@@ -13,6 +13,8 @@ export function GameScreen() {
   const [timeLeft, setTimeLeft] = useState(turnTime);
   const [turnEnded, setTurnEnded] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const player = players[currentPlayerIndex];
+  const color = PLAYER_COLORS[player.colorIndex];
 
   const stopTimer = useCallback(() => {
     if (timerRef.current) {
@@ -48,7 +50,7 @@ export function GameScreen() {
   const handleAnswer = (index: number): boolean => {
     const isCorrect = submitAnswer(index);
     if (isCorrect) {
-      playSound("correct");
+      playSound("correct", roundAnswers.correct);
     } else {
       playSound("wrong");
       setTimeLeft((prev) => {
@@ -65,6 +67,7 @@ export function GameScreen() {
   };
 
   const handleEndTurn = () => {
+    playSound("click");
     stopTimer();
     setTurnEnded(true);
     endTurn();
@@ -75,7 +78,10 @@ export function GameScreen() {
   const points = SCORING[roundAnswers.correct] || 0;
 
   return (
-    <div className="min-h-[100dvh] game-gradient flex flex-col">
+    <div
+      className="min-h-[100dvh] game-bg-player flex flex-col"
+      style={{ '--player-gradient': `linear-gradient(135deg, ${color.bg}, ${color.light})` } as React.CSSProperties}
+    >
       <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
 
       <div className="px-4 py-2">
@@ -95,7 +101,7 @@ export function GameScreen() {
             running={!turnEnded}
           />
         </div>
-        <div className="w-full px-2">
+        <div className="w-full px-0">
           <AnswerWheel
             question={currentQuestion}
             onAnswer={handleAnswer}
@@ -109,7 +115,7 @@ export function GameScreen() {
         {turnEnded ? (
           <div className="text-center mb-3">
             <p className="text-foreground font-display text-lg font-bold">
-              {roundAnswers.correct === 5 ? "🎉 Všech 5 správných!" : `⏱ Čas vypršel!`}
+              {roundAnswers.correct === 5 ? "Všech 5 správných!" : "Čas vypršel!"}
             </p>
             <p className="text-primary font-bold">+{points} bodů</p>
           </div>
@@ -117,9 +123,9 @@ export function GameScreen() {
 
         <button
           onClick={handleEndTurn}
-          className="btn-game w-full"
+          className="btn-game-plastic w-full"
         >
-          {turnEnded ? "Pokračovat →" : `Odeslat (${roundAnswers.correct}/5) →`}
+          {turnEnded ? "Pokračovat" : `Odeslat (${roundAnswers.correct}/5)`}
         </button>
       </div>
     </div>

@@ -1,38 +1,46 @@
 import { useState } from "react";
 import { useGame } from "@/context/GameContext";
 import { Confetti } from "@/components/game/Confetti";
-import { CrownLogo } from "@/components/game/CrownLogo";
+import logoImage from "@/assets/logo-party-king.png";
+import { playSound } from "@/lib/sounds";
 
 export function HomeScreen() {
   const { setScreen } = useGame();
   const [showRules, setShowRules] = useState(false);
 
   return (
-    <div className="min-h-[100dvh] game-gradient flex flex-col items-center justify-center relative overflow-hidden px-4">
+    <div className="min-h-[100dvh] game-bg flex flex-col items-center justify-center relative overflow-hidden px-4">
       <Confetti count={20} />
       
       <div className="animate-bounce-in mb-10">
-        <CrownLogo size="large" />
+        <img src={logoImage} alt="Party King" className="w-52 h-auto drop-shadow-2xl" />
       </div>
 
       <button
-        onClick={() => setScreen("setup")}
-        className="btn-game animate-pulse-glow mb-4 min-w-[200px] border shadow-md">
-
+        onClick={() => { playSound("click"); setScreen("setup"); }}
+        className="btn-game-plastic animate-pulse-glow mb-4 min-w-[220px]"
+      >
         Nová hra
       </button>
 
       <button
-        onClick={() => setShowRules(true)}
-        className="text-muted-foreground underline text-sm">
+        onClick={() => { playSound("click"); setScreen("setup"); }}
+        className="btn-game-plastic-secondary mb-4 min-w-[220px]"
+      >
+        Vyzvi kamarády
+      </button>
 
+      <button
+        onClick={() => { playSound("click"); setShowRules(true); }}
+        className="text-muted-foreground underline text-sm"
+      >
          Pravidla
       </button>
 
       {showRules &&
       <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowRules(false)}>
           <div className="bg-card rounded-2xl p-6 max-w-sm w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <h2 className="font-display text-2xl font-bold text-primary mb-4">📖 Pravidla</h2>
+            <h2 className="font-display text-2xl font-bold text-primary mb-4">Pravidla</h2>
             <div className="space-y-3 text-sm text-foreground/90">
               <p><strong>Hráči:</strong> 1–8 hráčů na jednom zařízení</p>
               <p><strong>Cíl:</strong> Jako první dosáhnout cílového počtu bodů</p>
@@ -48,12 +56,12 @@ export function HomeScreen() {
               </ul>
               <p>Tah končí po nalezení všech 5 správných nebo po uplynutí času.</p>
             </div>
-            <button onClick={() => setShowRules(false)} className="btn-game mt-6 w-full text-base">
-              Rozumím! 👍
+            <button onClick={() => setShowRules(false)} className="btn-game-plastic mt-6 w-full text-base">
+              Rozumím!
             </button>
           </div>
         </div>
       }
-    </div>);
-
+    </div>
+  );
 }

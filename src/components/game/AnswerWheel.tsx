@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Question } from "@/data/questions";
+import logoImage from "@/assets/logo-party-king.png";
 
 interface AnswerWheelProps {
   question: Question;
@@ -29,7 +30,7 @@ function wrapText(text: string, maxChars: number): string[] {
 export function AnswerWheel({ question, onAnswer, disabled, correctCount }: AnswerWheelProps) {
   const [selected, setSelected] = useState<Record<number, "correct" | "wrong">>({});
   const totalAnswers = question.answers.length;
-  const size = 340;
+  const size = 400;
   const radius = size / 2 - 10;
   const centerX = size / 2;
   const centerY = size / 2;
@@ -77,11 +78,10 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
           // Wrap long text
           const maxChars = answer.text.length > 16 ? 10 : 14;
           const lines = wrapText(answer.text, maxChars);
-          const fontSize = lines.length > 1 ? 7 : answer.text.length > 12 ? 8 : answer.text.length > 8 ? 9 : 10;
+          const fontSize = lines.length > 1 ? 8 : answer.text.length > 12 ? 9 : answer.text.length > 8 ? 10 : 11;
           const lineHeight = fontSize + 2;
           const textStartY = ty - ((lines.length - 1) * lineHeight) / 2;
 
-          // Rotate text to align with slice
           const rotDeg = (midAngle * 180) / Math.PI;
           const flipText = rotDeg > 90 && rotDeg < 270;
           const textRotation = flipText ? rotDeg + 180 : rotDeg;
@@ -118,25 +118,22 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
             </g>
           );
         })}
-        {/* center circle with crown logo */}
-        <circle cx={centerX} cy={centerY} r="32" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
-        {/* Crown */}
-        <g transform={`translate(${centerX - 16}, ${centerY - 18})`}>
-          <svg viewBox="0 0 100 80" width="32" height="24" fill="none">
-            <path d="M10 65 L5 25 L25 40 L50 10 L75 40 L95 25 L90 65 Z" fill="hsl(38 95% 58%)" />
-            <path d="M10 65 L5 25 L25 40 L50 10 L75 40 L95 25 L90 65 Z" fill="url(#cwg)" />
-            <circle cx="5" cy="25" r="5" fill="hsl(38 95% 58%)" />
-            <circle cx="50" cy="10" r="6" fill="hsl(40 95% 62%)" />
-            <circle cx="95" cy="25" r="5" fill="hsl(38 95% 58%)" />
-            <defs><linearGradient id="cwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="hsl(45 95% 65%)" /><stop offset="100%" stopColor="hsl(30 95% 50%)" /></linearGradient></defs>
-          </svg>
-        </g>
-        <text x={centerX} y={centerY + 8} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="7" fontFamily="Fredoka, sans-serif" fontWeight="900" letterSpacing="0.5">
-          PARTY
-        </text>
-        <text x={centerX} y={centerY + 19} textAnchor="middle" dominantBaseline="central" fill="hsl(0 0% 100%)" fontSize="8" fontFamily="Fredoka, sans-serif" fontWeight="900" letterSpacing="0.5">
-          KING
-        </text>
+        {/* center circle with logo image */}
+        <defs>
+          <clipPath id="centerClip">
+            <circle cx={centerX} cy={centerY} r="38" />
+          </clipPath>
+        </defs>
+        <circle cx={centerX} cy={centerY} r="40" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
+        <image
+          href={logoImage}
+          x={centerX - 34}
+          y={centerY - 34}
+          width="68"
+          height="68"
+          clipPath="url(#centerClip)"
+          preserveAspectRatio="xMidYMid slice"
+        />
       </svg>
     </div>
   );

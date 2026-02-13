@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import { PLAYER_COLORS } from "@/types/game";
 import { Confetti } from "@/components/game/Confetti";
-import { Crown, RotateCcw } from "lucide-react";
 import { playSound } from "@/lib/sounds";
+import { CrownLogo } from "@/components/game/CrownLogo";
 
 export function WinnerScreen() {
   const { winner, players, resetGame } = useGame();
@@ -19,14 +19,14 @@ export function WinnerScreen() {
 
   return (
     <div
-      className="min-h-[100dvh] flex flex-col items-center justify-center px-4 relative overflow-hidden"
-      style={{ background: `linear-gradient(135deg, ${winnerColor.bg}, ${winnerColor.light})` }}
+      className="min-h-[100dvh] game-bg-player flex flex-col items-center justify-center px-4 relative overflow-hidden"
+      style={{ '--player-gradient': `linear-gradient(135deg, ${winnerColor.bg}, ${winnerColor.light})` } as React.CSSProperties}
     >
       <Confetti count={40} />
       
-      <Crown className="w-16 h-16 text-primary mb-2 animate-bounce-in" />
-      <h1 className="font-display text-3xl font-bold text-foreground mb-1 animate-bounce-in">
-        🎉 Vítěz! 🎉
+      <CrownLogo size="small" />
+      <h1 className="font-display text-3xl font-bold text-foreground mb-1 animate-bounce-in mt-4">
+        Vítěz!
       </h1>
       <h2 className="font-display text-4xl font-bold text-foreground mb-2 animate-bounce-in">
         {winner.name}
@@ -35,7 +35,7 @@ export function WinnerScreen() {
 
       {/* Full leaderboard */}
       <div className="bg-card/30 rounded-2xl p-4 w-full max-w-xs mb-8">
-        <h3 className="font-display text-lg font-bold text-foreground mb-3">🏆 Konečné pořadí</h3>
+        <h3 className="font-display text-lg font-bold text-foreground mb-3">Konečné pořadí</h3>
         {sorted.map((player, i) => {
           const color = PLAYER_COLORS[player.colorIndex];
           return (
@@ -45,8 +45,7 @@ export function WinnerScreen() {
               style={{ backgroundColor: `${color.bg}40` }}
             >
               <span className="text-foreground font-bold flex items-center gap-2">
-                <span>{i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}</span>
-                <span className="text-sm">{color.pattern.slice(0, 2)}</span>
+                <span>{i + 1}.</span>
                 {player.name}
               </span>
               <span className="text-foreground font-display font-bold">{player.score}</span>
@@ -55,8 +54,8 @@ export function WinnerScreen() {
         })}
       </div>
 
-      <button onClick={resetGame} className="btn-game flex items-center gap-2">
-        <RotateCcw className="w-5 h-5" /> Nová hra
+      <button onClick={() => { playSound("click"); resetGame(); }} className="btn-game-plastic">
+        Nová hra
       </button>
     </div>
   );

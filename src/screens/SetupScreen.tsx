@@ -3,7 +3,7 @@ import { useGame } from "@/context/GameContext";
 import { Player, PLAYER_COLORS } from "@/types/game";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
-import { Plus, X, Play } from "lucide-react";
+import { playSound } from "@/lib/sounds";
 
 export function SetupScreen() {
   const { setPlayers, setTargetScore, setTurnTime, targetScore, turnTime, startGame, setScreen } = useGame();
@@ -18,6 +18,7 @@ export function SetupScreen() {
 
   const addPlayer = () => {
     if (!name.trim() || localPlayers.length >= 8) return;
+    playSound("click");
     const player: Player = {
       id: crypto.randomUUID(),
       name: name.trim(),
@@ -34,10 +35,12 @@ export function SetupScreen() {
   };
 
   const removePlayer = (id: string) => {
+    playSound("click");
     setLocalPlayers((prev) => prev.filter((p) => p.id !== id));
   };
 
   const handleStart = () => {
+    playSound("click");
     setPlayers(localPlayers);
     setTargetScore(localTarget);
     setTurnTime(localTurnTime);
@@ -45,9 +48,9 @@ export function SetupScreen() {
   };
 
   return (
-    <div className="min-h-[100dvh] game-gradient flex flex-col px-4 py-6 overflow-y-auto">
-      <button onClick={() => setScreen("home")} className="text-muted-foreground text-sm mb-4 self-start">
-        ← Zpět
+    <div className="min-h-[100dvh] game-bg flex flex-col px-4 py-6 overflow-y-auto">
+      <button onClick={() => { playSound("click"); setScreen("home"); }} className="text-muted-foreground text-sm mb-4 self-start">
+        Zpět
       </button>
 
       <h2 className="font-display text-2xl font-bold text-foreground mb-6">Nastavení hry</h2>
@@ -55,7 +58,7 @@ export function SetupScreen() {
       {/* Target score */}
       <div className="mb-4">
         <label className="text-sm font-bold text-foreground mb-2 block">
-          🎯 Cílové skóre: <span className="text-primary">{localTarget}</span>
+          Cílové skóre: <span className="text-primary">{localTarget}</span>
         </label>
         <Slider
           value={[localTarget]}
@@ -70,7 +73,7 @@ export function SetupScreen() {
       {/* Turn time */}
       <div className="mb-6">
         <label className="text-sm font-bold text-foreground mb-2 block">
-          ⏱ Čas na kolo: <span className="text-primary">{localTurnTime}s</span>
+          Čas na kolo: <span className="text-primary">{localTurnTime}s</span>
         </label>
         <Slider
           value={[localTurnTime]}
@@ -85,7 +88,7 @@ export function SetupScreen() {
       {/* Add player */}
       <div className="bg-card/50 rounded-2xl p-4 mb-4">
         <label className="text-sm font-bold text-foreground mb-2 block">
-          👤 Přidat hráče ({localPlayers.length}/8)
+          Přidat hráče ({localPlayers.length}/8)
         </label>
         <div className="flex gap-2 mb-3">
           <Input
@@ -99,13 +102,13 @@ export function SetupScreen() {
           <button
             onClick={addPlayer}
             disabled={!name.trim() || localPlayers.length >= 8}
-            className="btn-game px-4 py-2 text-sm disabled:opacity-40"
+            className="btn-game-plastic px-4 py-2 text-sm disabled:opacity-40"
           >
-            <Plus className="w-5 h-5" />
+            +
           </button>
         </div>
         
-        {/* Color picker with pattern preview */}
+        {/* Color picker */}
         <div className="flex gap-2 flex-wrap">
           {PLAYER_COLORS.map((color, i) => {
             const isUsed = usedColors.includes(i);
@@ -114,16 +117,14 @@ export function SetupScreen() {
                 key={i}
                 disabled={isUsed}
                 onClick={() => setSelectedColor(i)}
-                className="w-10 h-10 rounded-full border-2 transition-all disabled:opacity-20 flex items-center justify-center text-[10px]"
+                className="w-10 h-10 rounded-full border-2 transition-all disabled:opacity-20"
                 style={{
                   backgroundColor: color.bg,
                   borderColor: selectedColor === i ? "white" : "transparent",
                   transform: selectedColor === i ? "scale(1.15)" : "scale(1)",
                 }}
-                title={color.pattern}
-              >
-                {color.pattern.slice(0, 2)}
-              </button>
+                title={color.name}
+              />
             );
           })}
         </div>
@@ -139,12 +140,9 @@ export function SetupScreen() {
               className="flex items-center justify-between rounded-xl px-4 py-3"
               style={{ backgroundColor: color.bg }}
             >
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{color.pattern.slice(0, 2)}</span>
-                <span className="font-bold text-foreground">{player.name}</span>
-              </div>
-              <button onClick={() => removePlayer(player.id)}>
-                <X className="w-5 h-5 text-foreground/70" />
+              <span className="font-bold text-foreground">{player.name}</span>
+              <button onClick={() => removePlayer(player.id)} className="text-foreground/70 font-bold text-lg">
+                ✕
               </button>
             </div>
           );
@@ -155,9 +153,9 @@ export function SetupScreen() {
       <button
         onClick={handleStart}
         disabled={localPlayers.length < 1}
-        className="btn-game w-full disabled:opacity-40 flex items-center justify-center gap-2"
+        className="btn-game-plastic w-full disabled:opacity-40"
       >
-        <Play className="w-5 h-5" /> Start hry
+        Start hry
       </button>
     </div>
   );
