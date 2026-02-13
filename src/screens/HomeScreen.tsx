@@ -23,12 +23,6 @@ export function HomeScreen() {
         Nová hra
       </button>
 
-      <button
-        onClick={() => { playSound("click"); setScreen("setup"); }}
-        className="btn-game-plastic-secondary mb-4 min-w-[220px]"
-      >
-        Vyzvi kamarády
-      </button>
 
       <button
         onClick={() => { playSound("click"); setShowRules(true); }}
