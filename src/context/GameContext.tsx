@@ -1,3 +1,4 @@
+// Game context provider
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { Player, GameScreen, SCORING } from "@/types/game";
 import { Question, getRandomQuestions, shuffleAnswers } from "@/data/questions";
