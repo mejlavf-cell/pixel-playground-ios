@@ -19,8 +19,7 @@ export function WinnerScreen() {
 
   return (
     <div
-      className="min-h-[100dvh] game-bg-player flex flex-col items-center justify-center px-4 relative overflow-hidden"
-      style={{ '--player-gradient': `linear-gradient(135deg, ${winnerColor.bg}, ${winnerColor.light})` } as React.CSSProperties}
+      className="min-h-[100dvh] game-bg-image flex flex-col items-center justify-center px-4 relative overflow-hidden"
     >
       <Confetti count={40} />
       
