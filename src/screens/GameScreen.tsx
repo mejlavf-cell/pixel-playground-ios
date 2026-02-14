@@ -82,7 +82,8 @@ export function GameScreen() {
 
   return (
     <div
-      className="min-h-[100dvh] game-bg-image flex flex-col"
+      className="min-h-[100dvh] flex flex-col"
+      style={{ background: `url(${color.bgImage}) center/cover no-repeat` }}
     >
       <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
 

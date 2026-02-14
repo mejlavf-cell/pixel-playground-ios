@@ -30,7 +30,7 @@ function wrapText(text: string, maxChars: number): string[] {
 export function AnswerWheel({ question, onAnswer, disabled, correctCount }: AnswerWheelProps) {
   const [selected, setSelected] = useState<Record<number, "correct" | "wrong">>({});
   const totalAnswers = question.answers.length;
-  const size = 440;
+  const size = 500;
   const radius = size / 2 - 10;
   const centerX = size / 2;
   const centerY = size / 2;
