@@ -9,11 +9,11 @@ export function HomeScreen() {
   const [showRules, setShowRules] = useState(false);
 
   return (
-    <div className="min-h-[100dvh] game-bg flex flex-col items-center justify-center relative overflow-hidden px-4">
+    <div className="min-h-[100dvh] game-bg-image flex flex-col items-center justify-center relative overflow-hidden px-4">
       <Confetti count={20} />
       
       <div className="animate-bounce-in mb-10">
-        <img alt="Party King" className="w-52 h-auto drop-shadow-2xl" src="/lovable-uploads/bc72b49e-3f54-4976-b1b9-875af26e3f74.png" />
+        <img alt="Party King" className="w-64 h-auto drop-shadow-2xl" src="/lovable-uploads/bc72b49e-3f54-4976-b1b9-875af26e3f74.png" />
       </div>
 
       <button

@@ -30,7 +30,7 @@ function wrapText(text: string, maxChars: number): string[] {
 export function AnswerWheel({ question, onAnswer, disabled, correctCount }: AnswerWheelProps) {
   const [selected, setSelected] = useState<Record<number, "correct" | "wrong">>({});
   const totalAnswers = question.answers.length;
-  const size = 400;
+  const size = 440;
   const radius = size / 2 - 10;
   const centerX = size / 2;
   const centerY = size / 2;
@@ -121,16 +121,16 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
         {/* center circle with logo image */}
         <defs>
           <clipPath id="centerClip">
-            <circle cx={centerX} cy={centerY} r="38" />
+            <circle cx={centerX} cy={centerY} r="42" />
           </clipPath>
         </defs>
-        <circle cx={centerX} cy={centerY} r="40" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
+        <circle cx={centerX} cy={centerY} r="44" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
         <image
           href={logoImage}
-          x={centerX - 34}
-          y={centerY - 34}
-          width="68"
-          height="68"
+          x={centerX - 40}
+          y={centerY - 40}
+          width="80"
+          height="80"
           clipPath="url(#centerClip)"
           preserveAspectRatio="xMidYMid slice"
         />

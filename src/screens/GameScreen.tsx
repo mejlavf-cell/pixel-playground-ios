@@ -79,8 +79,7 @@ export function GameScreen() {
 
   return (
     <div
-      className="min-h-[100dvh] game-bg-player flex flex-col"
-      style={{ '--player-gradient': `linear-gradient(135deg, ${color.bg}, ${color.light})` } as React.CSSProperties}
+      className="min-h-[100dvh] game-bg-image flex flex-col"
     >
       <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
 
