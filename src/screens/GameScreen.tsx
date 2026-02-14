@@ -12,6 +12,7 @@ export function GameScreen() {
   const { currentQuestion, players, currentPlayerIndex, submitAnswer, endTurn, roundAnswers, turnTime } = useGame();
   const [timeLeft, setTimeLeft] = useState(turnTime);
   const [turnEnded, setTurnEnded] = useState(false);
+  const [timeExpired, setTimeExpired] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const player = players[currentPlayerIndex];
   const color = PLAYER_COLORS[player.colorIndex];
@@ -29,6 +30,7 @@ export function GameScreen() {
         if (prev <= 1) {
           stopTimer();
           setTurnEnded(true);
+          setTimeExpired(true);
           playSound("timeUp");
           return 0;
         }
@@ -58,6 +60,7 @@ export function GameScreen() {
         if (next <= 0) {
           stopTimer();
           setTurnEnded(true);
+          setTimeExpired(true);
           playSound("timeUp");
         }
         return next;
@@ -70,12 +73,12 @@ export function GameScreen() {
     playSound("click");
     stopTimer();
     setTurnEnded(true);
-    endTurn();
+    endTurn(timeExpired);
   };
 
   if (!currentQuestion) return null;
 
-  const points = SCORING[roundAnswers.correct] || 0;
+  const points = timeExpired ? 0 : (SCORING[roundAnswers.correct] || 0);
 
   return (
     <div
