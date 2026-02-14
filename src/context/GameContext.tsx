@@ -1,7 +1,7 @@
 // Game context provider
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 import { Player, GameScreen, SCORING } from "@/types/game";
-import { Question, getRandomQuestions, shuffleAnswers } from "@/data/questions";
+import { Question, getRandomQuestions, shuffleAnswers, isAnswerCorrect } from "@/data/questions";
 
 interface GameState {
   screen: GameScreen;
@@ -46,6 +46,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     winner: null,
     roundFinishPending: false,
   });
+
+  // Keep a ref to state for synchronous reads in submitAnswer
+  const stateRef = useRef(state);
+  useEffect(() => { stateRef.current = state; }, [state]);
 
   const setScreen = useCallback((screen: GameScreen) => {
     setState((s) => ({ ...s, screen }));
@@ -104,18 +108,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const submitAnswer = useCallback((answerIndex: number): boolean => {
-    let isCorrect = false;
-    setState((s) => {
-      if (!s.currentQuestion) return s;
-      isCorrect = s.currentQuestion.answers[answerIndex].correct;
-      if (isCorrect) {
-        return {
-          ...s,
-          roundAnswers: { correct: s.roundAnswers.correct + 1 },
-        };
-      }
-      return s;
-    });
+    // Read correctness directly from current state snapshot — not inside setState
+    const currentQ = stateRef.current.currentQuestion;
+    if (!currentQ) return false;
+    const isCorrect = currentQ.answers[answerIndex]?.correct === true;
+    if (isCorrect) {
+      setState((s) => ({
+        ...s,
+        roundAnswers: { correct: s.roundAnswers.correct + 1 },
+      }));
+    }
     return isCorrect;
   }, []);
 

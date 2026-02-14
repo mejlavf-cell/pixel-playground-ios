@@ -1,7 +1,13 @@
+export interface Answer {
+  id?: string;
+  text: string;
+  correct: boolean;
+}
+
 export interface Question {
   id: number;
   question: string;
-  answers: { text: string; correct: boolean }[];
+  answers: Answer[];
 }
 
 export const questions: Question[] = [
@@ -1612,9 +1618,20 @@ export function getRandomQuestions(count: number): Question[] {
   return shuffled.slice(0, count);
 }
 
+/** Assign stable unique IDs to each answer and shuffle */
 export function shuffleAnswers(question: Question): Question {
+  const withIds = question.answers.map((a, i) => ({
+    ...a,
+    id: a.id || `q${question.id}-a${i}`,
+  }));
   return {
     ...question,
-    answers: [...question.answers].sort(() => Math.random() - 0.5),
+    answers: [...withIds].sort(() => Math.random() - 0.5),
   };
+}
+
+/** Check if a specific answer is correct by its ID */
+export function isAnswerCorrect(question: Question, answerId: string): boolean {
+  const answer = question.answers.find((a) => a.id === answerId);
+  return answer?.correct ?? false;
 }
