@@ -9,8 +9,8 @@ export function PlayerTransitionScreen() {
 
   return (
     <div
-      className="min-h-[100dvh] game-bg-player flex flex-col items-center justify-center px-4"
-      style={{ '--player-gradient': `linear-gradient(135deg, ${color.bg}, ${color.light})` } as React.CSSProperties}
+      className="min-h-[100dvh] flex flex-col items-center justify-center px-4"
+      style={{ background: `url(${color.bgImage}) center/cover no-repeat` }}
     >
       <p className="text-foreground/70 text-sm mb-4 font-bold relative z-10">Na tahu je:</p>
       <h1 className="font-display text-4xl font-bold text-foreground mb-2 animate-bounce-in relative z-10">
