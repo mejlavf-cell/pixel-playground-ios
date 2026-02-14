@@ -1,3 +1,4 @@
+// Game entry point
 import { GameProvider, useGame } from "@/context/GameContext";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { SetupScreen } from "@/screens/SetupScreen";
