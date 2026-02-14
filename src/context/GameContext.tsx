@@ -25,7 +25,7 @@ interface GameContextType extends GameState {
   startGame: () => void;
   startTurn: () => void;
   submitAnswer: (answerIndex: number) => boolean;
-  endTurn: () => void;
+  endTurn: (timeExpired?: boolean) => void;
   resetGame: () => void;
 }
 
@@ -118,9 +118,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return isCorrect;
   }, []);
 
-  const endTurn = useCallback(() => {
+  const endTurn = useCallback((timeExpired?: boolean) => {
     setState((s) => {
-      const points = SCORING[s.roundAnswers.correct] || 0;
+      const points = timeExpired ? 0 : (SCORING[s.roundAnswers.correct] || 0);
       const updatedPlayers = s.players.map((p, i) =>
         i === s.currentPlayerIndex ? { ...p, score: p.score + points } : p
       );

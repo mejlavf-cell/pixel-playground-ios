@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Question } from "@/data/questions";
-import logoImage from "@/assets/logo-party-king.png";
+const logoImage = "/lovable-uploads/bc72b49e-3f54-4976-b1b9-875af26e3f74.png";
 
 interface AnswerWheelProps {
   question: Question;
