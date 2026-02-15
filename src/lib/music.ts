@@ -1,7 +1,9 @@
 // Background music manager
 let audio: HTMLAudioElement | null = null;
 let isPlaying = false;
+let unlocked = false;
 
+/** Call this synchronously inside a user gesture (click/tap) to unlock and start music */
 export function startMusic() {
   if (isPlaying) return;
   if (!audio) {
@@ -9,7 +11,11 @@ export function startMusic() {
     audio.loop = true;
     audio.volume = 0.3;
   }
-  audio.play().then(() => { isPlaying = true; }).catch(() => {});
+  // Synchronous play attempt within user gesture context unlocks audio on mobile
+  audio.play().then(() => {
+    isPlaying = true;
+    unlocked = true;
+  }).catch(() => {});
 }
 
 export function stopMusic() {
