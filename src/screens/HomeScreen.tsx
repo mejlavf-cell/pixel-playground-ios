@@ -9,8 +9,19 @@ export function HomeScreen() {
   const { setScreen } = useGame();
   const [showRules, setShowRules] = useState(false);
 
+  // Start music on first user interaction (required by browser autoplay policy)
   useEffect(() => {
-    startMusic();
+    const handler = () => {
+      startMusic();
+      window.removeEventListener("click", handler);
+      window.removeEventListener("touchstart", handler);
+    };
+    window.addEventListener("click", handler, { once: true });
+    window.addEventListener("touchstart", handler, { once: true });
+    return () => {
+      window.removeEventListener("click", handler);
+      window.removeEventListener("touchstart", handler);
+    };
   }, []);
 
   return (
