@@ -78,7 +78,7 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
           // Wrap long text
           const maxChars = answer.text.length > 16 ? 10 : 14;
           const lines = wrapText(answer.text, maxChars);
-          const fontSize = lines.length > 1 ? 10 : answer.text.length > 12 ? 11 : answer.text.length > 8 ? 12 : 13;
+          const fontSize = lines.length > 1 ? 12 : answer.text.length > 12 ? 13 : answer.text.length > 8 ? 14 : 15;
           const lineHeight = fontSize + 2;
           const textStartY = ty - ((lines.length - 1) * lineHeight) / 2;
 
@@ -124,7 +124,7 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
           cy={centerY}
           r={radius + 4}
           fill="none"
-          stroke="hsl(40 90% 55%)"
+          stroke="hsl(30 95% 55%)"
           strokeWidth="3"
           style={{ filter: "drop-shadow(0 2px 4px hsla(0 0% 0% / 0.4))" }}
         />
