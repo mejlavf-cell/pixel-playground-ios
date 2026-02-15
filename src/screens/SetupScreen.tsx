@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import { Player, PLAYER_COLORS } from "@/types/game";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { playSound } from "@/lib/sounds";
+import { startMusic, stopMusic } from "@/lib/music";
 
 export function SetupScreen() {
   const { setPlayers, setTargetScore, setTurnTime, targetScore, turnTime, startGame, setScreen } = useGame();
@@ -41,11 +42,16 @@ export function SetupScreen() {
 
   const handleStart = () => {
     playSound("click");
+    stopMusic();
     setPlayers(localPlayers);
     setTargetScore(localTarget);
     setTurnTime(localTurnTime);
     startGame();
   };
+
+  useEffect(() => {
+    startMusic();
+  }, []);
 
   return (
     <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">

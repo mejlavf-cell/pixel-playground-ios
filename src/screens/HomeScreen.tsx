@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGame } from "@/context/GameContext";
 import { Confetti } from "@/components/game/Confetti";
 import logoImage from "@/assets/logo-party-king.png";
 import { playSound } from "@/lib/sounds";
+import { startMusic, stopMusic } from "@/lib/music";
 
 export function HomeScreen() {
   const { setScreen } = useGame();
   const [showRules, setShowRules] = useState(false);
+
+  useEffect(() => {
+    startMusic();
+  }, []);
 
   return (
     <div className="min-h-[100dvh] game-bg-image flex flex-col items-center justify-center relative overflow-hidden px-4">
