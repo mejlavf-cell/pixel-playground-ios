@@ -78,7 +78,7 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
           // Wrap long text
           const maxChars = answer.text.length > 16 ? 10 : 14;
           const lines = wrapText(answer.text, maxChars);
-          const fontSize = lines.length > 1 ? 8 : answer.text.length > 12 ? 9 : answer.text.length > 8 ? 10 : 11;
+          const fontSize = lines.length > 1 ? 10 : answer.text.length > 12 ? 11 : answer.text.length > 8 ? 12 : 13;
           const lineHeight = fontSize + 2;
           const textStartY = ty - ((lines.length - 1) * lineHeight) / 2;
 
@@ -118,13 +118,23 @@ export function AnswerWheel({ question, onAnswer, disabled, correctCount }: Answ
             </g>
           );
         })}
+        {/* Yellow plastic border around entire wheel */}
+        <circle
+          cx={centerX}
+          cy={centerY}
+          r={radius + 4}
+          fill="none"
+          stroke="hsl(40 90% 55%)"
+          strokeWidth="3"
+          style={{ filter: "drop-shadow(0 2px 4px hsla(0 0% 0% / 0.4))" }}
+        />
         {/* center circle with logo image */}
         <defs>
           <clipPath id="centerClip">
             <circle cx={centerX} cy={centerY} r="42" />
           </clipPath>
         </defs>
-        <circle cx={centerX} cy={centerY} r="44" fill="hsl(270 50% 15%)" stroke="hsl(30 95% 55%)" strokeWidth="3" />
+        <circle cx={centerX} cy={centerY} r="44" fill="hsl(270 50% 15%)" stroke="hsl(40 90% 55%)" strokeWidth="3" />
         <image
           href={logoImage}
           x={centerX - 40}
