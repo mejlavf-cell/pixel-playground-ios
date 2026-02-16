@@ -9,6 +9,7 @@ interface GameState {
   targetScore: number;
   turnTime: number;
   currentPlayerIndex: number;
+  currentRoundIndex: number;
   currentQuestion: Question | null;
   roundQuestion: Question | null;
   usedQuestionIds: number[];
@@ -16,6 +17,12 @@ interface GameState {
   winner: Player | null;
   /** Track if someone reached target this round, to let others finish */
   roundFinishPending: boolean;
+  /** ID of the player who first triggered the final round */
+  finalRoundTriggeredByPlayerId: string | null;
+  /** Lock target score once final round starts */
+  targetScoreLocked: boolean;
+  /** Tied players requiring a tiebreaker */
+  tiedPlayers: Player[];
 }
 
 interface GameContextType extends GameState {
@@ -39,12 +46,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     targetScore: 50,
     turnTime: 60,
     currentPlayerIndex: 0,
+    currentRoundIndex: 0,
     currentQuestion: null,
     roundQuestion: null,
     usedQuestionIds: [],
     roundAnswers: { correct: 0 },
     winner: null,
     roundFinishPending: false,
+    finalRoundTriggeredByPlayerId: null,
+    targetScoreLocked: false,
+    tiedPlayers: [],
   });
 
   // Keep a ref to state for synchronous reads in submitAnswer
@@ -60,7 +71,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setTargetScore = useCallback((targetScore: number) => {
-    setState((s) => ({ ...s, targetScore }));
+    setState((s) => s.targetScoreLocked ? s : { ...s, targetScore });
   }, []);
 
   const setTurnTime = useCallback((turnTime: number) => {
@@ -72,10 +83,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       ...s,
       screen: "playerTransition",
       currentPlayerIndex: 0,
+      currentRoundIndex: 0,
       usedQuestionIds: [],
       players: s.players.map((p) => ({ ...p, score: 0 })),
       winner: null,
       roundFinishPending: false,
+      finalRoundTriggeredByPlayerId: null,
+      targetScoreLocked: false,
+      tiedPlayers: [],
     }));
   }, []);
 
@@ -130,21 +145,52 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
       const currentPlayer = updatedPlayers[s.currentPlayerIndex];
       const reachedTarget = currentPlayer.score >= s.targetScore;
-      const pendingNow = s.roundFinishPending || reachedTarget;
+
+      // Track who first triggered the final round
+      let finalTriggeredBy = s.finalRoundTriggeredByPlayerId;
+      let pendingNow = s.roundFinishPending;
+      let locked = s.targetScoreLocked;
+
+      if (reachedTarget && !pendingNow) {
+        pendingNow = true;
+        finalTriggeredBy = currentPlayer.id;
+        locked = true;
+      } else if (reachedTarget) {
+        pendingNow = true;
+      }
 
       const nextIndex = (s.currentPlayerIndex + 1) % s.players.length;
       const isRoundEnd = nextIndex === 0; // wrapped around = end of round
 
-      // If round ends and someone reached the target → winner screen
+      // If round ends and someone reached the target → determine winner or tiebreaker
       if (isRoundEnd && pendingNow) {
-        // Find the player with highest score
-        const best = [...updatedPlayers].sort((a, b) => b.score - a.score)[0];
+        const sorted = [...updatedPlayers].sort((a, b) => b.score - a.score);
+        const highScore = sorted[0].score;
+        const tied = sorted.filter((p) => p.score === highScore);
+
+        if (tied.length > 1) {
+          return {
+            ...s,
+            players: updatedPlayers,
+            currentRoundIndex: s.currentRoundIndex + 1,
+            tiedPlayers: tied,
+            screen: "tiebreaker" as GameScreen,
+            roundFinishPending: false,
+            finalRoundTriggeredByPlayerId: finalTriggeredBy,
+            targetScoreLocked: locked,
+          };
+        }
+
         return {
           ...s,
           players: updatedPlayers,
-          winner: best,
+          currentRoundIndex: s.currentRoundIndex + 1,
+          winner: sorted[0],
           screen: "winner",
           roundFinishPending: false,
+          finalRoundTriggeredByPlayerId: finalTriggeredBy,
+          targetScoreLocked: locked,
+          tiedPlayers: [],
         };
       }
 
@@ -152,8 +198,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         ...s,
         players: updatedPlayers,
         currentPlayerIndex: nextIndex,
+        currentRoundIndex: isRoundEnd ? s.currentRoundIndex + 1 : s.currentRoundIndex,
         screen: "playerTransition",
         roundFinishPending: pendingNow,
+        finalRoundTriggeredByPlayerId: finalTriggeredBy,
+        targetScoreLocked: locked,
       };
     });
   }, []);
@@ -165,12 +214,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       targetScore: 50,
       turnTime: 60,
       currentPlayerIndex: 0,
+      currentRoundIndex: 0,
       currentQuestion: null,
       roundQuestion: null,
       usedQuestionIds: [],
       roundAnswers: { correct: 0 },
       winner: null,
       roundFinishPending: false,
+      finalRoundTriggeredByPlayerId: null,
+      targetScoreLocked: false,
+      tiedPlayers: [],
     });
   }, []);
 

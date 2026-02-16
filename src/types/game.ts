@@ -18,4 +18,4 @@ export const PLAYER_COLORS = [
 
 export const SCORING = [0, 1, 3, 5, 7, 10]; // index = correct count
 
-export type GameScreen = "home" | "setup" | "playerTransition" | "game" | "winner";
+export type GameScreen = "home" | "setup" | "playerTransition" | "game" | "winner" | "tiebreaker";
