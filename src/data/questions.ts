@@ -1613,8 +1613,11 @@ export const questions: Question[] = [
   },
 ];
 
-export function getRandomQuestions(count: number): Question[] {
-  const shuffled = [...questions].sort(() => Math.random() - 0.5);
+export function getRandomQuestions(count: number, allowedIds?: number[]): Question[] {
+  const pool = allowedIds
+    ? questions.filter((q) => allowedIds.includes(q.id))
+    : questions;
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
 
