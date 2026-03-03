@@ -21,5 +21,23 @@ export const DEFAULT_PACK: QuestionPack = {
   isFree: true,
 };
 
+export const MUSIC_PACK: QuestionPack = {
+  id: "music-pack",
+  title: "Hudební balíček",
+  description: "100 otázek o hudbě – kapely, nástroje, žánry, skladatelé a hity.",
+  questionCount: 100,
+  price: 49,
+  isFree: false,
+};
+
+export const HARD_PACK: QuestionPack = {
+  id: "hard-pack",
+  title: "Náročný balíček",
+  description: "100 těžších otázek z vědy, historie, filozofie a dalších oblastí.",
+  questionCount: 100,
+  price: 69,
+  isFree: false,
+};
+
 /** All available packs. New packs are added here. */
-export const ALL_PACKS: QuestionPack[] = [DEFAULT_PACK];
+export const ALL_PACKS: QuestionPack[] = [DEFAULT_PACK, MUSIC_PACK, HARD_PACK];

@@ -5,4 +5,6 @@
  */
 export const PACK_QUESTION_MAP: Record<string, number[]> = {
   "starter-pack": Array.from({ length: 100 }, (_, i) => i + 1),
+  "music-pack": Array.from({ length: 100 }, (_, i) => i + 101),
+  "hard-pack": Array.from({ length: 100 }, (_, i) => i + 201),
 };
