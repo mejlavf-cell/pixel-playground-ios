@@ -1,5 +1,6 @@
 // Game entry point
 import { GameProvider, useGame } from "@/context/GameContext";
+import { PackProvider } from "@/context/PackContext";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { SetupScreen } from "@/screens/SetupScreen";
 import { PlayerTransitionScreen } from "@/screens/PlayerTransitionScreen";
@@ -27,9 +28,11 @@ function GameRouter() {
 
 const Index = () => {
   return (
-    <GameProvider>
-      <GameRouter />
-    </GameProvider>
+    <PackProvider>
+      <GameProvider>
+        <GameRouter />
+      </GameProvider>
+    </PackProvider>
   );
 };
 

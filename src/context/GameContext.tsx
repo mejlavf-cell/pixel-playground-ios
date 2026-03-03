@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 import { Player, GameScreen, SCORING } from "@/types/game";
 import { Question, getRandomQuestions, shuffleAnswers, isAnswerCorrect } from "@/data/questions";
+import { PACK_QUESTION_MAP } from "@/data/pack-questions";
+import { usePacks } from "@/context/PackContext";
 
 interface GameState {
   screen: GameScreen;
@@ -40,6 +42,7 @@ interface GameContextType extends GameState {
 const GameContext = createContext<GameContextType | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
+  const { selectedPackIds } = usePacks();
   const [state, setState] = useState<GameState>({
     screen: "home",
     players: [],
@@ -95,13 +98,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const startTurn = useCallback(() => {
+    const allowedIds = selectedPackIds.flatMap((pid) => PACK_QUESTION_MAP[pid] ?? []);
     setState((s) => {
       // New round (first player) → pick a new question
       if (s.currentPlayerIndex === 0 || !s.currentQuestion) {
-        const available = getRandomQuestions(100).filter(
+        const available = getRandomQuestions(100, allowedIds).filter(
           (q) => !s.usedQuestionIds.includes(q.id)
         );
-        const base = available.length > 0 ? available[0] : getRandomQuestions(1)[0];
+        const base = available.length > 0 ? available[0] : getRandomQuestions(1, allowedIds)[0];
         const question = shuffleAnswers(base);
         return {
           ...s,
@@ -120,7 +124,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         roundAnswers: { correct: 0 },
       };
     });
-  }, []);
+  }, [selectedPackIds]);
 
   const submitAnswer = useCallback((answerIndex: number): boolean => {
     // Read correctness directly from current state snapshot — not inside setState
