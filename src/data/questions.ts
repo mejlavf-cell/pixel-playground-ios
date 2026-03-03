@@ -1613,6 +1613,12 @@ export const questions: Question[] = [
   },
 ];
 
+import { musicQuestions } from "./questions-music";
+import { hardQuestions } from "./questions-hard";
+
+// Merge all pack questions into the main pool
+questions.push(...musicQuestions, ...hardQuestions);
+
 export function getRandomQuestions(count: number, allowedIds?: number[]): Question[] {
   const pool = allowedIds
     ? questions.filter((q) => allowedIds.includes(q.id))
