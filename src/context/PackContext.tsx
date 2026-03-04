@@ -22,8 +22,8 @@ function loadPackState(): PackState {
     // ignore
   }
   return {
-    ownedPackIds: [DEFAULT_PACK.id],
-    selectedPackIds: [DEFAULT_PACK.id],
+    ownedPackIds: ALL_PACKS.map((p) => p.id),
+    selectedPackIds: ALL_PACKS.map((p) => p.id),
   };
 }
 
