@@ -50,7 +50,11 @@ export function PacksScreen({ onClose }: PacksScreenProps) {
           return (
             <div
               key={pack.id}
-              className="bg-card/60 backdrop-blur rounded-2xl p-4 flex items-start gap-4"
+              className="bg-card/60 backdrop-blur rounded-2xl p-4 flex items-start gap-4 cursor-pointer"
+              onClick={() => {
+                playSound("click");
+                togglePackSelection(pack.id);
+              }}
             >
               {/* Icon */}
               <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0">
@@ -72,7 +76,7 @@ export function PacksScreen({ onClose }: PacksScreenProps) {
 
                 {/* Actions row */}
                 <div className="flex items-center justify-between mt-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                     <Checkbox
                       checked={isSelected(pack.id)}
                       onCheckedChange={() => {
@@ -86,7 +90,8 @@ export function PacksScreen({ onClose }: PacksScreenProps) {
                   {!isDefault && (
                     <button
                       className="flex items-center gap-1.5 text-xs font-bold bg-primary/20 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/30 transition-colors"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         playSound("click");
                         // TODO: Purchase logic
                       }}
