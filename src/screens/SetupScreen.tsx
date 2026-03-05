@@ -4,12 +4,14 @@ import { usePacks } from "@/context/PackContext";
 import { Player, PLAYER_COLORS } from "@/types/game";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { PacksScreen } from "@/screens/PacksScreen";
+import { Package } from "lucide-react";
 import { playSound } from "@/lib/sounds";
 import { startMusic, stopMusic } from "@/lib/music";
 
 export function SetupScreen() {
-  const { packs, isSelected, togglePackSelection, noPacksSelected } = usePacks();
+  const { noPacksSelected, selectedPackIds, packs } = usePacks();
+  const [showPacks, setShowPacks] = useState(false);
   const { setPlayers, setTargetScore, setTurnTime, targetScore, turnTime, startGame, setScreen } = useGame();
   const [localPlayers, setLocalPlayers] = useState<Player[]>([]);
   const [name, setName] = useState("");
@@ -55,6 +57,10 @@ export function SetupScreen() {
   useEffect(() => {
     startMusic();
   }, []);
+
+  if (showPacks) {
+    return <PacksScreen onClose={() => setShowPacks(false)} />;
+  }
 
   return (
     <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">
@@ -158,37 +164,23 @@ export function SetupScreen() {
         })}
       </div>
 
-      {/* Question packs */}
-      <div className="bg-card/50 rounded-2xl p-4 mb-6">
-        <label className="text-sm font-bold text-foreground mb-3 block">
-          Balíčky otázek
-        </label>
-        {noPacksSelected && (
-          <p className="text-destructive text-xs mb-2">Vyber alespoň jeden balíček!</p>
-        )}
-        <div className="space-y-2">
-          {packs.map((pack) => (
-            <label
-              key={pack.id}
-              className="flex items-start gap-3 rounded-xl bg-muted/50 px-4 py-3 cursor-pointer"
-            >
-              <Checkbox
-                checked={isSelected(pack.id)}
-                onCheckedChange={() => {
-                  playSound("click");
-                  togglePackSelection(pack.id);
-                }}
-                className="mt-0.5"
-              />
-              <div className="flex-1 min-w-0">
-                <span className="font-bold text-foreground text-sm block">{pack.title}</span>
-                <span className="text-muted-foreground text-xs block">{pack.description}</span>
-                <span className="text-muted-foreground text-xs">{pack.questionCount} otázek</span>
-              </div>
-            </label>
-          ))}
+      {/* Question packs button */}
+      <button
+        onClick={() => { playSound("click"); setShowPacks(true); }}
+        className="bg-card/50 rounded-2xl p-4 mb-6 w-full text-left flex items-center gap-3 hover:bg-card/70 transition-colors"
+      >
+        <Package className="w-5 h-5 text-primary shrink-0" />
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-bold text-foreground block">Balíčky otázek</span>
+          <span className="text-muted-foreground text-xs">
+            {selectedPackIds.length} z {packs.length} aktivních
+          </span>
         </div>
-      </div>
+        <span className="text-muted-foreground text-sm">›</span>
+      </button>
+      {noPacksSelected && (
+        <p className="text-destructive text-xs mb-2 -mt-4">Vyber alespoň jeden balíček!</p>
+      )}
 
       {/* Start */}
       <button
