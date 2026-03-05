@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/context/GameContext";
 import { usePacks } from "@/context/PackContext";
 import { Player, PLAYER_COLORS } from "@/types/game";
