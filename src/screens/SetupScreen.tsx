@@ -75,14 +75,12 @@ export function SetupScreen() {
       ) : (
         <motion.div
           key="setup"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.15 }}
+          className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto"
         >
-
-  return (
-    <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">
       <button onClick={() => { playSound("click"); setScreen("home"); }} className="text-muted-foreground text-sm mb-4 self-start">
         Zpět
       </button>
