@@ -18,7 +18,7 @@ export function PacksScreen({ onClose }: PacksScreenProps) {
   const { packs, isSelected, togglePackSelection, noPacksSelected } = usePacks();
 
   return (
-    <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">
+    <div className="h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">
       <button
         onClick={() => {
           playSound("click");
