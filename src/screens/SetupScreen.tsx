@@ -209,6 +209,8 @@ export function SetupScreen() {
       >
         Start hry
       </button>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
