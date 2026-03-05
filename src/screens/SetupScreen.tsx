@@ -188,8 +188,22 @@ export function SetupScreen() {
       >
         Start hry
       </button>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+
+      <AnimatePresence>
+        {showPacks && (
+          <motion.div
+            key="packs"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50"
+          >
+            <PacksScreen onClose={() => setShowPacks(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
