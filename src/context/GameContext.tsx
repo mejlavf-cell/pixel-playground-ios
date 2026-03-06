@@ -230,11 +230,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       targetScoreLocked: false,
       tiedPlayers: [],
     });
-  const invalidateRound = useCallback(() => {
-    // Mark round as invalidated - score will be 0
   }, []);
 
-  
+  const invalidateRound = useCallback(() => {
+    // No-op; GameScreen handles scoring as 0 when invalidated
+  }, []);
 
   return (
     <GameContext.Provider
@@ -249,6 +249,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         submitAnswer,
         endTurn,
         resetGame,
+        invalidateRound,
       }}
     >
       {children}
