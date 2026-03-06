@@ -37,6 +37,7 @@ interface GameContextType extends GameState {
   submitAnswer: (answerIndex: number) => boolean;
   endTurn: (timeExpired?: boolean) => void;
   resetGame: () => void;
+  invalidateRound: () => void;
 }
 
 const GameContext = createContext<GameContextType | null>(null);
@@ -231,6 +232,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const invalidateRound = useCallback(() => {
+    // No-op; GameScreen handles scoring as 0 when invalidated
+  }, []);
+
   return (
     <GameContext.Provider
       value={{
@@ -244,6 +249,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         submitAnswer,
         endTurn,
         resetGame,
+        invalidateRound,
       }}
     >
       {children}
