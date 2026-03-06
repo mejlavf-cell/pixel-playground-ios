@@ -1,0 +1,9 @@
+{
+  "appId": "app.lovable.b89aaf65c1bc42008d9ee6c568e21dcf",
+  "appName": "pixel-playground-ios",
+  "webDir": "dist",
+  "server": {
+    "url": "https://b89aaf65-c1bc-4200-8d9e-e6c568e21dcf.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  }
+}
