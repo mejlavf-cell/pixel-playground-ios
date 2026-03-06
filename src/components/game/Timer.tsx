@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface TimerProps {
   totalSeconds: number;
@@ -13,16 +13,12 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
   const cx = 24;
   const cy = 24;
   
-  // hand moves clockwise from 12 o'clock: elapsed fraction * 360
   const elapsed = 1 - fraction;
   const handAngle = elapsed * 360;
   const handRad = (handAngle - 90) * (Math.PI / 180);
   const hx = cx + (r - 4) * Math.cos(handRad);
   const hy = cy + (r - 4) * Math.sin(handRad);
 
-  // arc: draw remaining portion clockwise from 12 o'clock
-  // We draw the "remaining" arc starting where elapsed ends, going clockwise to 12 o'clock
-  // Easier: draw elapsed arc (red bg) and remaining arc (green) on top
   const elapsedRad = -Math.PI / 2 + elapsed * 2 * Math.PI;
   const remLargeArc = fraction > 0.5 ? 1 : 0;
   const elapsedLargeArc = elapsed > 0.5 ? 1 : 0;
@@ -30,7 +26,6 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
   const ex = cx + r * Math.cos(elapsedRad);
   const ey = cy + r * Math.sin(elapsedRad);
 
-  // Remaining arc: from elapsedRad clockwise back to 12 o'clock (-PI/2)
   const topX = cx;
   const topY = cy - r;
 
@@ -40,15 +35,27 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
     ? `M ${topX} ${topY} A ${r} ${r} 0 1 1 ${topX - 0.01} ${topY}`
     : `M ${ex} ${ey} A ${r} ${r} 0 ${remLargeArc} 1 ${topX} ${topY}`;
 
-  // Elapsed arc: from 12 o'clock clockwise to elapsedRad
   const elapsedArcPath = elapsed <= 0
     ? ""
     : elapsed >= 1
     ? `M ${topX} ${topY} A ${r} ${r} 0 1 1 ${topX - 0.01} ${topY}`
     : `M ${topX} ${topY} A ${r} ${r} 0 ${elapsedLargeArc} 1 ${ex} ${ey}`;
 
+  const isUrgent = remainingSeconds <= 10 && remainingSeconds > 0;
+  const isCritical = remainingSeconds <= 5 && remainingSeconds > 0;
+
+  // Blink state for last 10 seconds
+  const blinkClass = isUrgent && running ? "animate-pulse" : "";
+
+  // Remaining arc color
+  const arcColor = isCritical 
+    ? "hsl(0 90% 50%)" 
+    : isUrgent 
+    ? "hsl(40 95% 55%)" 
+    : "hsl(145 70% 50%)";
+
   return (
-    <div className="flex flex-col items-center gap-0.5">
+    <div className={`flex flex-col items-center gap-0.5 ${blinkClass}`}>
       <svg width="48" height="48" viewBox="0 0 48 48">
         {/* background circle */}
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 0% 100% / 0.1)" strokeWidth="4" />
@@ -56,9 +63,9 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
         {elapsedArcPath && (
           <path d={elapsedArcPath} fill="none" stroke="hsl(0 80% 45%)" strokeWidth="4" opacity="0.5" />
         )}
-        {/* remaining arc (green) */}
+        {/* remaining arc */}
         {remainingArcPath && (
-          <path d={remainingArcPath} fill="none" stroke="hsl(145 70% 50%)" strokeWidth="4" strokeLinecap="round" />
+          <path d={remainingArcPath} fill="none" stroke={arcColor} strokeWidth="4" strokeLinecap="round" />
         )}
         {/* center dot */}
         <circle cx={cx} cy={cy} r="2" fill="hsl(30 95% 55%)" />
@@ -81,7 +88,13 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
           );
         })}
       </svg>
-      <span className="text-xs font-bold font-display" style={{ color: remainingSeconds <= 10 ? "hsl(0 80% 55%)" : "hsl(0 0% 100%)" }}>
+      <span 
+        className={`text-xs font-bold font-display ${isUrgent ? "scale-110" : ""}`}
+        style={{ 
+          color: isCritical ? "hsl(0 90% 55%)" : isUrgent ? "hsl(40 95% 60%)" : "hsl(0 0% 100%)",
+          transition: "color 0.3s, transform 0.3s"
+        }}
+      >
         {remainingSeconds}s
       </span>
     </div>

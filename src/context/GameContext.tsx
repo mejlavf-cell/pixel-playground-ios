@@ -37,6 +37,7 @@ interface GameContextType extends GameState {
   submitAnswer: (answerIndex: number) => boolean;
   endTurn: (timeExpired?: boolean) => void;
   resetGame: () => void;
+  invalidateRound: () => void;
 }
 
 const GameContext = createContext<GameContextType | null>(null);
