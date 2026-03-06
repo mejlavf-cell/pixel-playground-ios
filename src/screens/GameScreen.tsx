@@ -190,10 +190,10 @@ export function GameScreen() {
             </div>
             <div className="px-4 pb-6 pt-2">
               <button
-                onClick={handleEndTurn}
+                onClick={handleAIContinue}
                 className="btn-game-plastic w-full"
               >
-                Pokračovat (0 bodů)
+                Pokračovat – kolo se opakuje
               </button>
             </div>
           </motion.div>
