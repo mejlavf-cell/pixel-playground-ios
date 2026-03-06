@@ -82,7 +82,7 @@ export function GameScreen() {
     playSound("click");
     stopTimer();
     setTurnEnded(true);
-    endTurn(timeExpired || roundInvalidated);
+    endTurn(timeExpired);
   };
 
   const handleAIExplain = () => {
@@ -91,7 +91,11 @@ export function GameScreen() {
     setTurnEnded(true);
     setShowAIExplanation(true);
     setRoundInvalidated(true);
-    invalidateRound();
+  };
+
+  const handleAIContinue = () => {
+    playSound("click");
+    invalidateRound(); // restarts the round for all players
   };
 
   if (!currentQuestion) return null;
@@ -186,10 +190,10 @@ export function GameScreen() {
             </div>
             <div className="px-4 pb-6 pt-2">
               <button
-                onClick={handleEndTurn}
+                onClick={handleAIContinue}
                 className="btn-game-plastic w-full"
               >
-                Pokračovat (0 bodů)
+                Pokračovat – kolo se opakuje
               </button>
             </div>
           </motion.div>

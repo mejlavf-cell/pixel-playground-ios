@@ -44,9 +44,6 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
   const isUrgent = remainingSeconds <= 10 && remainingSeconds > 0;
   const isCritical = remainingSeconds <= 5 && remainingSeconds > 0;
 
-  // Blink state for last 10 seconds
-  const blinkClass = isUrgent && running ? "animate-pulse" : "";
-
   // Remaining arc color
   const arcColor = isCritical 
     ? "hsl(0 90% 50%)" 
@@ -54,8 +51,15 @@ export function Timer({ totalSeconds, remainingSeconds, onTick, running }: Timer
     ? "hsl(40 95% 55%)" 
     : "hsl(145 70% 50%)";
 
+  const urgentScale = isCritical ? "scale-[1.3]" : isUrgent ? "scale-[1.15]" : "";
+  const blinkStyle = isUrgent && running ? {
+    animation: isCritical 
+      ? "timer-blink 0.35s ease-in-out infinite" 
+      : "timer-blink 0.7s ease-in-out infinite",
+  } : undefined;
+
   return (
-    <div className={`flex flex-col items-center gap-0.5 ${blinkClass}`}>
+    <div className={`flex flex-col items-center gap-0.5 transition-transform duration-300 ${urgentScale}`} style={blinkStyle}>
       <svg width="48" height="48" viewBox="0 0 48 48">
         {/* background circle */}
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(0 0% 100% / 0.1)" strokeWidth="4" />

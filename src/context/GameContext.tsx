@@ -233,7 +233,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const invalidateRound = useCallback(() => {
-    // No-op; GameScreen handles scoring as 0 when invalidated
+    // Restart the entire round for all players: reset to first player of current round
+    setState((s) => ({
+      ...s,
+      currentPlayerIndex: 0,
+      currentQuestion: null,
+      roundQuestion: null,
+      roundAnswers: { correct: 0 },
+      screen: "playerTransition",
+    }));
   }, []);
 
   return (
