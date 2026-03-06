@@ -82,7 +82,7 @@ export function GameScreen() {
     playSound("click");
     stopTimer();
     setTurnEnded(true);
-    endTurn(timeExpired || roundInvalidated);
+    endTurn(timeExpired);
   };
 
   const handleAIExplain = () => {
@@ -91,7 +91,11 @@ export function GameScreen() {
     setTurnEnded(true);
     setShowAIExplanation(true);
     setRoundInvalidated(true);
-    invalidateRound();
+  };
+
+  const handleAIContinue = () => {
+    playSound("click");
+    invalidateRound(); // restarts the round for all players
   };
 
   if (!currentQuestion) return null;
