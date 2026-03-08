@@ -35,6 +35,31 @@ export function HomeScreen() {
   return (
     <div className="min-h-[100dvh] game-bg-image flex flex-col items-center justify-center relative overflow-hidden px-4">
       <Confetti count={20} />
+
+      {/* User button - top right */}
+      <div className="absolute top-4 right-4 z-10">
+        {!loading && (
+          user ? (
+            <button
+              onClick={() => { playSound("click"); setShowProfile(true); }}
+              className="flex items-center gap-2 bg-card/60 backdrop-blur rounded-full px-4 py-2 text-sm"
+            >
+              <Crown className="w-4 h-4 text-primary" />
+              <span className="text-foreground font-bold truncate max-w-[100px]">
+                {profile?.display_name ?? "Profil"}
+              </span>
+            </button>
+          ) : (
+            <button
+              onClick={() => { playSound("click"); setShowAuth(true); }}
+              className="flex items-center gap-2 bg-card/60 backdrop-blur rounded-full px-4 py-2 text-sm"
+            >
+              <User className="w-4 h-4 text-muted-foreground" />
+              <span className="text-foreground">Přihlásit</span>
+            </button>
+          )
+        )}
+      </div>
       
       <div className="animate-bounce-in mb-10">
         <img alt="Party King" className="w-64 h-auto drop-shadow-2xl" src="/lovable-uploads/bc72b49e-3f54-4976-b1b9-875af26e3f74.png" />
@@ -43,15 +68,12 @@ export function HomeScreen() {
       <button
         onClick={() => {playSound("click");setScreen("setup");}}
         className="btn-game-plastic animate-pulse-glow mb-4 min-w-[220px]">
-
         Nová hra
       </button>
-
 
       <button
         onClick={() => {playSound("click");setShowRules(true);}}
         className="text-muted-foreground underline text-sm">
-
          Pravidla
       </button>
 
@@ -80,6 +102,38 @@ export function HomeScreen() {
           </div>
         </div>
       }
+
+      {/* Auth overlay */}
+      <AnimatePresence>
+        {showAuth && (
+          <motion.div
+            key="auth"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50"
+          >
+            <AuthScreen onClose={() => setShowAuth(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Profile overlay */}
+      <AnimatePresence>
+        {showProfile && (
+          <motion.div
+            key="profile"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50"
+          >
+            <ProfileScreen onClose={() => setShowProfile(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>);
 
 }
