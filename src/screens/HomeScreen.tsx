@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "@/context/GameContext";
+import { useAuth } from "@/context/AuthContext";
 import { Confetti } from "@/components/game/Confetti";
+import { AuthScreen } from "@/screens/AuthScreen";
+import { ProfileScreen } from "@/screens/ProfileScreen";
 import logoImage from "@/assets/logo-party-king.png";
 import { playSound } from "@/lib/sounds";
 import { startMusic, stopMusic } from "@/lib/music";
+import { User, Crown } from "lucide-react";
 
 export function HomeScreen() {
   const { setScreen } = useGame();
+  const { user, profile, loading } = useAuth();
   const [showRules, setShowRules] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   // Start music on first user interaction (required by browser autoplay policy)
   useEffect(() => {
