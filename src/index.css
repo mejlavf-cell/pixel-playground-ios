@@ -60,7 +60,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Nunito', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
     -webkit-user-select: none;
     user-select: none;
   }

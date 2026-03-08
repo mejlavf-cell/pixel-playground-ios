@@ -61,7 +61,7 @@ export function SetupScreen() {
 
   return (
     <>
-      <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 overflow-y-auto">
+      <div className="min-h-[100dvh] game-bg-image flex flex-col px-4 py-6 pb-[env(safe-area-inset-bottom,16px)] overflow-y-auto" style={{ overflow: 'auto' }}>
       <button onClick={() => { playSound("click"); setScreen("home"); }} className="text-muted-foreground text-sm mb-4 self-start">
         Zpět
       </button>
