@@ -66,10 +66,26 @@ export function HomeScreen() {
       </div>
 
       <button
-        onClick={() => {playSound("click");setScreen("setup");}}
+        onClick={() => {
+          playSound("click");
+          if (!user) {
+            setShowAuth(true);
+          } else {
+            setScreen("setup");
+          }
+        }}
         className="btn-game-plastic animate-pulse-glow mb-4 min-w-[220px]">
         Nová hra
       </button>
+
+      {!loading && !user && (
+        <button
+          onClick={() => { playSound("click"); setShowAuth(true); }}
+          className="btn-game-plastic mb-4 min-w-[220px] bg-card/80 text-foreground border-2 border-primary/40"
+        >
+          Přihlásit se / Registrace
+        </button>
+      )}
 
       <button
         onClick={() => {playSound("click");setShowRules(true);}}
