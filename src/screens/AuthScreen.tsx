@@ -41,7 +41,8 @@ export function AuthScreen({ onClose }: AuthScreenProps) {
       if (result.error) {
         setError(result.error);
       } else {
-        setSuccess(true);
+        playSound("correct");
+        onClose();
       }
     }
     setLoading(false);
