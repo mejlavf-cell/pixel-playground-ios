@@ -4,6 +4,7 @@ import { useGame } from "@/context/GameContext";
 import { useAuth } from "@/context/AuthContext";
 import { Confetti } from "@/components/game/Confetti";
 import { AuthScreen } from "@/screens/AuthScreen";
+import { TutorialScreen } from "@/screens/TutorialScreen";
 import { ProfileScreen } from "@/screens/ProfileScreen";
 import logoImage from "@/assets/logo-party-king.png";
 import { playSound } from "@/lib/sounds";
