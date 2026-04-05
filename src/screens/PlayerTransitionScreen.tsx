@@ -1,5 +1,6 @@
 import { useGame } from "@/context/GameContext";
 import { PLAYER_COLORS } from "@/types/game";
+import { ScoreBoard } from "@/components/game/ScoreBoard";
 import { playSound } from "@/lib/sounds";
 
 export function PlayerTransitionScreen() {
