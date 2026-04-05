@@ -10,6 +10,16 @@ export function PlayerTransitionScreen() {
 
   return (
     <div
+      className="min-h-[100dvh] flex flex-col"
+      style={{ background: `url(${color.bgImage}) center/cover no-repeat` }}
+    >
+      <ScoreBoard players={players} currentPlayerIndex={currentPlayerIndex} />
+
+      <div className="flex-1 flex flex-col items-center justify-center px-4">
+  const color = PLAYER_COLORS[player.colorIndex];
+
+  return (
+    <div
       className="min-h-[100dvh] flex flex-col items-center justify-center px-4"
       style={{ background: `url(${color.bgImage}) center/cover no-repeat` }}
     >
