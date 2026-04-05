@@ -1615,9 +1615,10 @@ export const questions: Question[] = [
 
 import { musicQuestions } from "./questions-music";
 import { hardQuestions } from "./questions-hard";
+import { geoQuestions } from "./questions-geo";
 
 // Merge all pack questions into the main pool
-questions.push(...musicQuestions, ...hardQuestions);
+questions.push(...musicQuestions, ...hardQuestions, ...geoQuestions);
 
 export function getRandomQuestions(count: number, allowedIds?: number[]): Question[] {
   const pool = allowedIds
