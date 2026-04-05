@@ -39,5 +39,14 @@ export const HARD_PACK: QuestionPack = {
   isFree: true,
 };
 
+export const GEO_PACK: QuestionPack = {
+  id: "geo-pack",
+  title: "Zeměpis Česka",
+  description: "100 otázek o zeměpisu ČR – řeky, pohoří, města, kraje, národní parky a více.",
+  questionCount: 100,
+  price: 0,
+  isFree: true,
+};
+
 /** All available packs. New packs are added here. */
-export const ALL_PACKS: QuestionPack[] = [DEFAULT_PACK, MUSIC_PACK, HARD_PACK];
+export const ALL_PACKS: QuestionPack[] = [DEFAULT_PACK, MUSIC_PACK, HARD_PACK, GEO_PACK];
