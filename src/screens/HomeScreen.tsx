@@ -90,9 +90,15 @@ export function HomeScreen() {
       )}
 
       <button
+        onClick={() => {playSound("click");setShowTutorial(true);}}
+        className="text-muted-foreground underline text-sm mb-2">
+         Návod ke hře
+      </button>
+
+      <button
         onClick={() => {playSound("click");setShowRules(true);}}
-        className="text-muted-foreground underline text-sm">
-         Pravidla
+        className="text-muted-foreground underline text-xs">
+         Pravidla (zkráceně)
       </button>
 
       {showRules &&
@@ -120,6 +126,22 @@ export function HomeScreen() {
           </div>
         </div>
       }
+
+      {/* Tutorial overlay */}
+      <AnimatePresence>
+        {showTutorial && (
+          <motion.div
+            key="tutorial"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50"
+          >
+            <TutorialScreen onClose={() => setShowTutorial(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Auth overlay */}
       <AnimatePresence>
