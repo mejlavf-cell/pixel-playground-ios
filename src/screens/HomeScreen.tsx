@@ -17,6 +17,7 @@ export function HomeScreen() {
   const [showRules, setShowRules] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // Start music on first user interaction (required by browser autoplay policy)
   useEffect(() => {
