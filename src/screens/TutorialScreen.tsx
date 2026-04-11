@@ -1,4 +1,4 @@
-import { X, Target, Clock, Brain, Sparkles, Layers, Trophy } from "lucide-react";
+import { X, Target, Clock, Brain, Sparkles, Layers, Trophy, ShoppingCart, CheckCircle, Hand } from "lucide-react";
 import { playSound } from "@/lib/sounds";
 
 interface TutorialScreenProps {
@@ -9,7 +9,7 @@ export function TutorialScreen({ onClose }: TutorialScreenProps) {
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col">
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <h1 className="font-display text-2xl font-bold text-primary">Návod</h1>
+        <h1 className="font-display text-2xl font-bold text-primary">Jak hrát Party King</h1>
         <button
           onClick={() => { playSound("click"); onClose(); }}
           className="w-9 h-9 flex items-center justify-center rounded-full bg-card/60"
@@ -19,81 +19,124 @@ export function TutorialScreen({ onClose }: TutorialScreenProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-5">
-        {/* Princip hry */}
-        <Section icon={<Target className="w-5 h-5 text-primary" />} title="Princip hry">
+        {/* Co je Party King */}
+        <Section icon={<Target className="w-5 h-5 text-primary" />} title="Co je Party King?">
           <p>
-            Party King je vědomostní hra pro 1–8 hráčů na jednom zařízení.
-            Hráči se střídají a odpovídají na otázky pomocí otočného kruhu
-            s 10 odpověďmi – 5 správných a 5 špatných.
+            Party King je <strong>vědomostní hra pro partu kamarádů</strong> (1–8 hráčů).
+            Všichni hrajete na jednom telefonu nebo tabletu – žádné stahování
+            dalších aplikací není potřeba.
           </p>
           <p>
-            Cílem je jako první dosáhnout nastaveného cílového skóre.
-            Jakmile ho někdo dosáhne, ostatní hráči dohrají kolo a vyhrává
-            ten s nejvyšším počtem bodů.
+            Střídáte se, odpovídáte na otázky a sbíráte body.
+            Kdo první nasbírá dost bodů, vyhrává! 👑
           </p>
         </Section>
 
-        {/* Průběh kola */}
-        <Section icon={<Clock className="w-5 h-5 text-primary" />} title="Průběh kola">
+        {/* Jak probíhá tah */}
+        <Section icon={<Hand className="w-5 h-5 text-primary" />} title="Jak probíhá tvůj tah">
+          <ol className="list-decimal pl-5 space-y-2">
+            <li>Zobrazí se ti <strong>otázka</strong> a velký kruh s <strong>10 odpověďmi</strong>.</li>
+            <li>Z těch 10 odpovědí je <strong>5 správných</strong> a <strong>5 špatných</strong> – jsou zamíchané.</li>
+            <li>Klikej na odpovědi, o kterých si myslíš, že jsou <strong>správné</strong>.</li>
+            <li>Až budeš hotový/á, klikni na <strong>„Potvrdit"</strong>.</li>
+          </ol>
+          <p className="mt-2">
+            💡 <strong>Tip:</strong> Nemusíš najít všech 5 – čím víc správných označíš,
+            tím víc bodů dostaneš. Ale pozor na chyby!
+          </p>
+        </Section>
+
+        {/* Časový limit */}
+        <Section icon={<Clock className="w-5 h-5 text-primary" />} title="Časový limit">
           <p>
-            Každé kolo mají všichni hráči <strong>stejnou otázku</strong> se
-            zamíchanými odpověďmi. Máš nastavený časový limit (výchozí 60 s)
-            na označení co nejvíce správných odpovědí.
+            Na každou otázku máš <strong>omezený čas</strong> (standardně 60 sekund).
+            Časomíru vidíš nahoře na obrazovce.
           </p>
           <p>
-            <strong>Pozor:</strong> Každá špatná odpověď odečte 10 sekund
-            z tvého času! Pokud ti vyprší čas, za kolo dostaneš 0 bodů.
+            ⚠️ <strong>Každá špatná odpověď ti sebere 10 sekund!</strong> Takže
+            neklikej naslepo – je lepší označit méně odpovědí, ale správně.
+          </p>
+          <p>
+            Pokud ti vyprší čas a nestihneš potvrdit, za toto kolo dostaneš <strong>0 bodů</strong>.
           </p>
         </Section>
 
         {/* Bodování */}
-        <Section icon={<Trophy className="w-5 h-5 text-primary" />} title="Bodování">
-          <div className="grid grid-cols-2 gap-1.5 text-sm">
+        <Section icon={<Trophy className="w-5 h-5 text-primary" />} title="Kolik bodů dostanu?">
+          <p>Čím víc správných odpovědí označíš, tím víc bodů:</p>
+          <div className="grid grid-cols-2 gap-1.5 text-sm mt-2">
             <div className="bg-card/40 rounded-lg px-3 py-1.5">1 správná = <strong>1 bod</strong></div>
             <div className="bg-card/40 rounded-lg px-3 py-1.5">2 správné = <strong>3 body</strong></div>
             <div className="bg-card/40 rounded-lg px-3 py-1.5">3 správné = <strong>5 bodů</strong></div>
             <div className="bg-card/40 rounded-lg px-3 py-1.5">4 správné = <strong>7 bodů</strong></div>
             <div className="bg-card/60 rounded-lg px-3 py-1.5 col-span-2 text-center border border-primary/30">
-              5 správných = <strong className="text-primary">10 bodů</strong> 🎉
+              Všech 5 správných = <strong className="text-primary">10 bodů</strong> 🎉
             </div>
           </div>
+          <p className="mt-2">
+            Za špatně označené odpovědi body neztrácíš (jen čas).
+            Ale pokud neoznačíš nic a jen potvrdíš, dostaneš 0.
+          </p>
+        </Section>
+
+        {/* Kdo vyhrává */}
+        <Section icon={<Crown className="w-5 h-5 text-primary" />} title="Kdo vyhrává?">
+          <p>
+            Před hrou si nastavíte <strong>cílové skóre</strong> (např. 30 bodů).
+            Jakmile někdo toto skóre dosáhne, <strong>ostatní hráči ještě dohrají
+            aktuální kolo</strong>, aby to bylo fér.
+          </p>
+          <p>
+            Vyhrává hráč s <strong>nejvyšším počtem bodů</strong>. Pokud mají dva
+            nebo více hráčů stejné skóre, nastává <strong>rozstřel</strong> –
+            speciální kolo, které rozhodne o vítězi.
+          </p>
         </Section>
 
         {/* Balíčky otázek */}
-        <Section icon={<Layers className="w-5 h-5 text-primary" />} title="Okruhy otázek">
+        <Section icon={<ShoppingCart className="w-5 h-5 text-primary" />} title="Balíčky otázek (okruhy)">
           <p>
-            Otázky jsou rozdělené do <strong>tematických balíčků</strong> (okruhů).
-            V nastavení hry si vybereš, které balíčky chceš hrát.
+            Otázky jsou rozdělené do <strong>tematických balíčků</strong> –
+            například „Obecné znalosti", „Hudba", „Zeměpis Česka" a další.
           </p>
-          <p>
-            Můžeš hrát <strong>jen jeden okruh</strong> (např. jen hudbu),
+          <div className="bg-card/40 rounded-lg p-3 space-y-2 mt-2">
+            <p className="font-bold text-foreground">Jak to funguje:</p>
+            <ol className="list-decimal pl-5 space-y-1">
+              <li><strong>Získej balíček</strong> – V nastavení hry klikni na „Balíčky" a získej ty, které tě zajímají (některé jsou zdarma).</li>
+              <li><strong>Označ balíček jako aktivní</strong> – Získaný balíček ještě musíš „zaškrtnout", aby se z něj losovaly otázky.</li>
+              <li><strong>Hraj!</strong> – Ve hře se pak otázky losují ze všech aktivních (zaškrtnutých) balíčků.</li>
+            </ol>
+          </div>
+          <p className="mt-2">
+            🎯 Můžeš hrát <strong>jen jeden okruh</strong> (např. jen hudbu),
             nebo <strong>zapnout všechny najednou</strong> pro pestřejší mix.
-            Otázky se pak losují ze všech aktivních balíčků.
-          </p>
-          <p>
-            Nové balíčky můžeš získat v sekci „Balíčky" v nastavení hry.
+            Vždy musí být aktivní alespoň jeden balíček.
           </p>
         </Section>
 
-        {/* AI tlačítko */}
+        {/* AI pomoc */}
         <Section icon={<Sparkles className="w-5 h-5 text-primary" />} title="AI pomoc">
           <p>
-            Během hry můžeš zmáčknout tlačítko <strong>AI</strong>. Umělá
-            inteligence ti vysvětlí, proč je každá odpověď správná nebo
-            špatná – ideální, když s odpovědí nesouhlasíš.
+            Během hry uvidíš tlačítko <strong>„AI"</strong>. Když na něj klikneš,
+            umělá inteligence ti vysvětlí, proč je každá odpověď správná nebo špatná.
           </p>
           <p>
-            <strong>Ale pozor:</strong> pokud AI použiješ, celé kolo se
-            zruší a začíná znovu pro všechny hráče. Body se nepočítají.
+            ⚠️ <strong>Má to ale háček:</strong> pokud AI použiješ, celé kolo se
+            zruší a začíná znovu pro všechny hráče. Body za toto kolo se nepočítají.
+            Používej to jen když opravdu potřebuješ vysvětlení!
           </p>
         </Section>
 
-        {/* Rozstřel */}
-        <Section icon={<Brain className="w-5 h-5 text-primary" />} title="Rozstřel">
+        {/* Střídání hráčů */}
+        <Section icon={<Brain className="w-5 h-5 text-primary" />} title="Střídání hráčů">
           <p>
-            Pokud na konci kola mají dva nebo více hráčů stejné nejvyšší
-            skóre, nastává <strong>rozstřel</strong> – speciální kolo,
-            které určí vítěze.
+            Hrajete na jednom zařízení. Po každém tahu se zobrazí obrazovka
+            s <strong>jménem dalšího hráče</strong>. Předejte telefon a další
+            hráč potvrdí, že je připravený.
+          </p>
+          <p>
+            Všichni hráči v jednom kole odpovídají na <strong>stejnou otázku</strong> –
+            ale odpovědi jsou pokaždé zamíchané jinak, takže koukat sousedovi nepomůže 😉
           </p>
         </Section>
       </div>

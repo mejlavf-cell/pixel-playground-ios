@@ -9,7 +9,7 @@ import { ProfileScreen } from "@/screens/ProfileScreen";
 import logoImage from "@/assets/logo-party-king.png";
 import { playSound } from "@/lib/sounds";
 import { startMusic, stopMusic } from "@/lib/music";
-import { User, Crown } from "lucide-react";
+import { User, Crown, BookOpen } from "lucide-react";
 
 export function HomeScreen() {
   const { setScreen } = useGame();
