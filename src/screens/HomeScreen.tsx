@@ -91,14 +91,9 @@ export function HomeScreen() {
 
       <button
         onClick={() => {playSound("click");setShowTutorial(true);}}
-        className="text-muted-foreground underline text-sm mb-2">
-         Návod ke hře
-      </button>
-
-      <button
-        onClick={() => {playSound("click");setShowRules(true);}}
-        className="text-muted-foreground underline text-xs">
-         Pravidla (zkráceně)
+        className="flex items-center gap-2 text-muted-foreground text-sm mt-2">
+        <BookOpen className="w-4 h-4" />
+        Jak hrát Party King
       </button>
 
       {showRules &&

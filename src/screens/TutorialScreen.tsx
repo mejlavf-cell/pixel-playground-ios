@@ -1,4 +1,4 @@
-import { X, Target, Clock, Brain, Sparkles, Layers, Trophy, ShoppingCart, CheckCircle, Hand } from "lucide-react";
+import { X, Target, Clock, Brain, Sparkles, Trophy, ShoppingCart, Hand, Crown } from "lucide-react";
 import { playSound } from "@/lib/sounds";
 
 interface TutorialScreenProps {
